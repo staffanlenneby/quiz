@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz · Staffan Lenneby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #2B3445; --muted: #5E6878; --line: #DCE0E7;
+  --navy: #37435A; --gold: #B07D1F;
+  --font: "Lato", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; color-scheme: dark }
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 48px; }
+.wrap { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
+.eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+h1 { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin: 0; line-height: 1.15; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+a.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px;
+  display: grid; gap: 6px; text-decoration: none; color: inherit; }
+a.card:hover { border-color: var(--gold); }
+a.card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+a.card b { color: var(--navy); font-size: 1.2rem; }
+@media (max-width: 480px) { body { font-size: 16px; } h1 { font-size: 1.55rem; } a.card { padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">Danderyds gymnasium</span>
+  <h1>Plugga inför provet</h1>
+  <p class="muted">Välj ditt quiz. Du kan göra om det hur många gånger du vill. Inget sparas och ingenting skickas in.</p>
+  <a class="card" href="sam2/">
+    <b>Politiska system: Sverige och USA</b>
+    <span class="muted">Samhällskunskap 2 · Moment 2 · 53 frågor</span>
+  </a>
+  <a class="card" href="historia/">
+    <b>Forntiden till nya tiden</b>
+    <span class="muted">Historia 1b · Moment 1 · 44 frågor</span>
+  </a>
+</div>
+</body>
+</html>

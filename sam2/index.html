@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politiska system-quizet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+/* Layout: en smal kolumn, ett kort i taget. Skifferblått och guld som i lektionernas bilder. */
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #2B3445; --muted: #5E6878; --line: #DCE0E7;
+  --navy: #37435A; --gold: #B07D1F; --goldbg: #F8ECD6;
+  --ok: #2E7D4F; --okbg: #E3F2E9; --bad: #B03A2E; --badbg: #FBE7E4;
+  --sel: #E6EAF2;
+  --font: "Lato", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin: 0; line-height: 1.15; text-wrap: balance; }
+h2 { font-size: 1.25rem; color: var(--navy); margin: 0; text-wrap: balance; }
+.eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 14px; }
+.muted { color: var(--muted); }
+p { margin: 0; }
+ol.rules { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid transparent; padding: 12px 18px; font-weight: 700; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.primary { background: var(--navy); color: var(--card); }
+.secondary { background: transparent; color: var(--navy); border-color: var(--line); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--gold); width: 0; transition: width .3s; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--goldbg); color: var(--ink); }
+.qtext { font-size: 1.2rem; font-weight: 700; line-height: 1.4; }
+.think { background: var(--goldbg); border-radius: 8px; padding: 12px 14px; font-size: .95rem; }
+.opts { display: grid; gap: 10px; }
+.opt { text-align: left; background: var(--card); color: var(--ink); border: 1.5px solid var(--line); font-weight: 400; display: flex; gap: 12px; align-items: flex-start; }
+.opt .k { flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center; background: var(--sel); font-weight: 700; font-size: .85rem; }
+.opt.chosen { border-color: var(--navy); background: var(--sel); }
+.opt.right { border-color: var(--ok); background: var(--okbg); }
+.opt.wrong { border-color: var(--bad); background: var(--badbg); }
+.opt:disabled { opacity: 1; cursor: default; }
+.verdict { font-weight: 900; font-size: 1.1rem; }
+.verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
+.fb { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+.fb b { color: var(--navy); }
+.ref { font-size: .85rem; color: var(--muted); }
+.score { font-size: 2.6rem; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pill { font-size: .8rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.pill.s { background: var(--okbg); color: var(--ok); } .pill.r { background: var(--goldbg); color: var(--gold); } .pill.p { background: var(--badbg); color: var(--bad); }
+ul.list, ol.list { margin: 0; padding-left: 1.2em; display: grid; gap: 10px; }
+ul.list li span, ol.list li span { display: block; color: var(--muted); font-size: .95rem; }
+.keys { font-size: .8rem; color: var(--muted); }
+@media (max-width: 480px) { body { font-size: 16px; } h1 { font-size: 1.55rem; } .card { padding: 16px; } .qtext { font-size: 1.1rem; } }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+<section id="start" class="card">
+  <span class="eyebrow">Samhällskunskap 2 · Moment 2</span>
+  <h1>Politiska system: Sverige och USA</h1>
+  <p>53 frågor inför provet. Quizet är gjort för att vara svårt, och det ska det vara. Ett resultat runt 70 procent på första försöket är bra.</p>
+  <h2>Så fungerar det</h2>
+  <ol class="rules">
+    <li>Frågan visas först utan svarsalternativ. Svara i huvudet innan du klickar på Visa alternativ.</li>
+    <li>Välj ett alternativ och tala om ifall du är säker eller gissar.</li>
+    <li>Svarar du fel får du veta varför just ditt svar var fel. Frågan kommer sedan tillbaka efter några andra frågor, och du måste svara rätt på den två gånger.</li>
+    <li>Poängen räknas på ditt första försök. På resultatsidan ser du vilka områden du behöver plugga och vilka fel du var säker på.</li>
+  </ol>
+  <p class="muted">Frågorna kommer i blandad ordning från hela provets omfattning, alltså både statsskicken, rättsstaten, rättigheterna, medierna och demokratins villkor. Räkna med ungefär 50 minuter. Du kan dela upp det på två pass.</p>
+  <div class="row"><button id="startBtn" class="primary">Starta quizet</button></div>
+</section>
+
+<section id="quiz" class="card" hidden>
+  <div class="top"><span id="prog"></span><span id="queueInfo"></span></div>
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="row"><span id="again" class="badge" hidden>Tillbaka: svara rätt igen</span><span id="areaTag" class="eyebrow" hidden></span></div>
+  <p id="qtext" class="qtext"></p>
+
+  <div id="thinkBox" class="think">Svara i huvudet först. Klicka sedan på Visa alternativ.</div>
+  <div id="showRow" class="row"><button id="showBtn" class="primary">Visa alternativ</button><span class="keys">eller tryck mellanslag</span></div>
+
+  <div id="opts" class="opts" hidden></div>
+  <div id="answerRow" class="row" hidden>
+    <button id="sureBtn" class="primary" disabled>Svara: jag är säker</button>
+    <button id="guessBtn" class="secondary" disabled>Svara: jag gissar</button>
+    <span class="keys">1–4 väljer, S eller G svarar</span>
+  </div>
+
+  <div id="fb" class="fb" hidden>
+    <p id="verdict" class="verdict"></p>
+    <p id="whyWrong" hidden></p>
+    <p id="explain"></p>
+    <p id="ref" class="ref"></p>
+    <p id="comeback" class="muted" hidden>Frågan kommer tillbaka om en stund.</p>
+    <div class="row"><button id="nextBtn" class="primary">Nästa fråga</button><span class="keys">eller tryck Enter</span></div>
+  </div>
+</section>
+
+<section id="result" hidden>
+  <div class="wrap">
+    <div class="card">
+      <span class="eyebrow">Resultat på första försöket</span>
+      <p class="score" id="score"></p>
+      <p id="scoreNote"></p>
+    </div>
+    <div class="card">
+      <h2>Per område</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Område</th><th>Rätt</th><th>Läge</th></tr></thead>
+        <tbody id="areaRows"></tbody>
+      </table></div>
+      <p class="muted">Sitter: 80 procent eller mer. Repetera: 50–79 procent. Plugga mer: under 50 procent.</p>
+    </div>
+    <div class="card" id="sureWrongCard">
+      <h2>Fel som du var säker på</h2>
+      <p class="muted">Det här är missuppfattningar. De är farligast, eftersom du inte vet om dem. Läs rätt svar och förklaringen en gång till.</p>
+      <ul class="list" id="sureWrong"></ul>
+    </div>
+    <div class="card">
+      <h2 id="planHead">Plugga på det här, i den här ordningen</h2>
+      <ol class="list" id="plan"></ol>
+    </div>
+    <div class="card">
+      <div class="row">
+        <button id="retryWrong" class="primary">Gör om dina fel</button>
+        <button id="restart" class="secondary">Gör om hela quizet</button>
+      </div>
+      <p class="muted">Bäst effekt får du om du gör om quizet i morgon eller om ett par dagar, inte direkt.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const AREAS = {
+  stat: { name: "Statsform och var makten ligger", ref: "Reflex s. 236–251", plan: "Läs om skillnaden mellan statsform och statsskick, och mellan delegerad och delad makt. Rita figuren med pilarna igen." },
+  parl: { name: "Parlamentarism och regeringsbildning", ref: "Reflex s. 170–197", plan: "Repetera hur talmannen och riksdagen bildar regering och vad gränsen 175 betyder vid omröstningen och vid misstroende." },
+  kong: { name: "Riksdagen och kongressen", ref: "Reflex s. 170–197 och häftet, Kongressen", plan: "Jämför en kammare med två. Lär dig hur platserna fördelas i representanthuset och senaten och hur filibustern fungerar." },
+  val:  { name: "Proportionella val och spärren", ref: "Reflex s. 236–251 och avsnittet om valet i Sverige, s. 170–197", plan: "Räkna mandat proportionellt med tio platser. Lär dig spärren, utjämningsmandaten och spärrarna i Europa." },
+  maj:  { name: "Majoritetsval och gerrymandering", ref: "Reflex s. 236–251 och häftet, Valkretsar och gerrymandering", plan: "Rita rutnätet med 50 väljare och fem valkretsar på tre sätt. Förklara packing och cracking med egna ord." },
+  pres: { name: "Presidentvalet", ref: "häftet, Presidentvalet och Primärvalen", plan: "Räkna om exemplet med tre delstater och förklara varför vinnaren tar alla elektorer. Läs om primärvalen." },
+  makt: { name: "Presidentstyre och maktdelning", ref: "häftet, Presidenten och Kongressens kontroll över presidenten", plan: "Skriv ner presidentens tre verktyg, de två saker presidenten inte kan, och kongressens sätt att kontrollera presidenten." },
+  domst:{ name: "Rättsstat och domstolar", ref: "Reflex s. 254–266 och häftet, Domstolarna", plan: "Skriv ner rättsstatens fyra krav. Förklara lagprövningsrätten och var den kommer ifrån, och jämför Lagrådet med Högsta domstolen." },
+  ratt: { name: "Rösträtt och mänskliga rättigheter", ref: "Reflex s. 149–155 och häftet, Rösträtten", plan: "Gå igenom rösträttens tidslinje i Sverige och USA, och skillnaden mellan Europakonventionen och Bill of Rights." },
+  med:  { name: "Medier och opinionsbildning", ref: "Reflex s. 116–123 och 136–140, samt häftet, Yttrandefrihet och medier", plan: "Lär dig mediernas tre uppgifter och dagordningsfunktionen. Jämför det svenska mediesystemet med det amerikanska." },
+  dem:  { name: "Demokratins regelbok", ref: "Reflex s. 97–99, och repetitionen från Samhällskunskap 1b", plan: "Lär dig de sex kraven utantill. Pröva dem sedan mot ett land i taget och se vilka krav som saknas. Lägg till pluralism och liberal demokrati." },
+};
+
+// o: alternativ, c: index för rätt svar, w: varför varje fel alternativ är fel, f: förklaring
+const Q = [
+  // ---------- stat ----------
+  { a: "stat", q: "Sverige och Saudiarabien är båda monarkier. Vad säger det om hur mycket makt statschefen har?",
+    o: ["Ingenting. Statsformen säger bara hur statschefen utses.", "Att statschefen har ungefär lika mycket makt i båda länderna.", "Att statschefen har mer makt än i en republik.", "Att båda länderna är demokratier."], c: 0,
+    w: [null, "Sveriges kung saknar politisk makt. Monarken i Saudiarabien styr på riktigt.", "I en presidentrepublik som USA har statschefen mycket mer makt än Sveriges kung.", "Saudiarabien är en enväldig monarki. Statsformen avgör inte om ett land är en demokrati."],
+    f: "Statsformen handlar om hur statschefen utses. Ärvs ämbetet är landet en monarki, väljs det är landet en republik. Hur mycket makt statschefen har avgörs av statsskicket." },
+  { a: "stat", q: "I vilket av länderna är presidenten både statschef och regeringschef?",
+    o: ["Frankrike", "USA", "Tyskland", "Italien"], c: 1,
+    w: ["Frankrike är semipresidentiellt. Makten delas mellan presidenten och premiärministern.", null, "Tyskland är en parlamentarisk republik. Presidenten har liten makt och regeringen styr.", "Italien är en parlamentarisk republik. Presidenten har liten makt och regeringen styr."],
+    f: "USA är en presidentrepublik. Presidenten är statschef och leder regeringen, och någon premiärminister finns inte." },
+  { a: "stat", q: "I Sverige bestämmer kommunerna mycket om skola och äldreomsorg. Vad följer av det?",
+    o: ["Sverige är en unionsstat, eftersom kommunerna har självstyre.", "Sverige är en unionsstat i skolfrågor och en enhetsstat i övrigt.", "Sverige är ändå en enhetsstat, eftersom riksdagen har delegerat makten och kan ta tillbaka den.", "De svenska kommunerna motsvarar amerikanska delstater."], c: 2,
+    w: ["Självstyre är inte samma sak som federalism. Det avgörande är vem som äger makten.", "Ett land kan inte vara federalt i vissa sakfrågor. Det avgörs av hur makten är fördelad i grundlagen.", null, "Kommunerna kan inte stifta egna lagar. Det kan delstaterna. Att förväxla kommun och delstat är det vanligaste felet."],
+    f: "I en enhetsstat lånar kommuner och regioner sin makt av riksdagen. Kommunerna har beskattningsrätt men ingen lagmakt." },
+  { a: "stat", q: "Vad är den avgörande skillnaden mellan en enhetsstat och en unionsstat?",
+    o: ["En enhetsstat har en kammare och en unionsstat har två.", "En enhetsstat är en monarki och en unionsstat är en republik.", "I en enhetsstat finns inga kommuner eller regioner.", "I en enhetsstat kan delegerad makt tas tillbaka. I en unionsstat har delstaterna makt som förbundsnivån inte kan ta ifrån dem."], c: 3,
+    w: ["Antalet kamrar avgör inte var makten ligger. Sverige har en kammare, men det är inte därför landet är en enhetsstat.", "Det blandar ihop statsform med var makten ligger. Frankrike är både enhetsstat och republik.", "Sverige är en enhetsstat med 290 kommuner och 21 regioner.", null],
+    f: "Delegerad makt kan tas tillbaka. Delad makt kan den inte. Det brittiska parlamentet kan i teorin avskaffa Skottlands parlament, men kongressen kan inte avskaffa Texas." },
+  { a: "stat", q: "Varför kan abortlagarna se olika ut i Texas och Kalifornien, men inte i Kiruna och Malmö?",
+    o: ["I USA stiftar delstaterna lagar på området. I Sverige stiftar riksdagen lagen för hela landet.", "De svenska regionerna har kommit överens om att ha samma regler.", "Kongressen har stiftat olika lagar för olika delstater.", "Presidenten bestämmer reglerna delstat för delstat."], c: 0,
+    w: [null, "Regionerna kan inte stifta lagar. Abortlagen är en riksdagslag.", "Kongressen stiftar federala lagar som gäller i hela landet. Skillnaderna kommer från delstaternas egna lagar.", "Presidenten stiftar inga lagar."],
+    f: "Högsta domstolen lämnade tillbaka frågan till delstaterna 2022. Sedan dess avgör varje delstat själv. Det är ett exempel på delad makt i en unionsstat." },
+
+  // ---------- parl ----------
+  { a: "parl", q: "Riksdagen röstar om talmannens förslag till statsminister. 170 röstar nej, 150 röstar ja och resten avstår. Vad händer?",
+    o: ["Kandidaten förlorar, eftersom fler röstade nej än ja.", "Kandidaten blir statsminister, eftersom färre än 175 röstade nej.", "Kandidaten förlorar, eftersom det krävs 175 ja-röster.", "Det blir extra val."], c: 1,
+    w: ["I Sverige räcker det att en majoritet låter bli att rösta nej. Hur många som röstar ja spelar ingen roll.", null, "Det krävs inga ja-röster alls. Det är 175 nej-röster som fäller ett förslag.", "Förslaget har godkänts, så det finns inget skäl till extra val."],
+    f: "Regeringen måste tolereras av riksdagen. Färre än 175 nej-röster betyder ja." },
+  { a: "parl", q: "Ett parti fick flest röster i valet men hamnar i opposition. Hur är det möjligt?",
+    o: ["Partiet hamnade under spärren i några valkretsar.", "Kungen valde en annan statsminister.", "Andra partier har tillsammans fler mandat och kan tolerera en annan regering.", "Grundlagen förbjuder det största partiet att regera ensamt."], c: 2,
+    w: ["Spärren gäller rösterna i hela landet och stänger bara ute partier under fyra procent.", "Kungen saknar politisk makt. Talmannen föreslår och riksdagen röstar.", null, "Det finns ingen sådan regel. Ett parti kan regera ensamt om riksdagen tolererar det."],
+    f: "Röster blir mandat, och makten kräver att riksdagen tolererar regeringen. Därför avgör samarbetet mellan partierna, och ett stort parti kan hamna utanför." },
+  { a: "parl", q: "Efter valet 2022 bildade M, KD och L regering. De hade 103 mandat. Vilken sorts regering är det?",
+    o: ["En majoritetsregering", "En enpartiregering", "En majoritetsregering i koalition, eftersom SD ingår", "En minoritetsregering i koalition, med SD som stödparti"], c: 3,
+    w: ["103 mandat är långt under 175.", "Tre partier delar på regeringsposterna. Då är det en koalition.", "SD stod utanför regeringen. Tidöavtalet band ihop de fyra partierna, men SD fick inga ministrar.", null],
+    f: "Koalition betyder att flera partier delar regeringen. Med färre än 175 mandat bakom sig är det en minoritetsregering, och därför behövdes stödet från SD." },
+  { a: "parl", q: "Vad krävs för att riksdagen ska tvinga bort en minister?",
+    o: ["Att 175 ledamöter röstar för en misstroendeförklaring", "Att konstitutionsutskottet fäller ministern i sin granskning", "Att en majoritet av de närvarande ledamöterna röstar mot ministern", "Att talmannen begär det"], c: 0,
+    w: [null, "KU granskar ministrarna men kan inte avsätta någon.", "Det krävs en majoritet av alla 349 ledamöter, alltså 175, oavsett hur många som är på plats.", "Talmannen leder regeringsbildningen men kan inte avsätta ministrar."],
+    f: "Misstroendeförklaringen kan användas när som helst. Den är riksdagens starkaste kontroll över regeringen." },
+
+  // ---------- kong ----------
+  { a: "kong", q: "Ett lagförslag har antagits i representanthuset med stor majoritet. Vad händer sedan?",
+    o: ["Lagen gäller, eftersom representanthuset är folkvalt.", "Senaten måste anta samma lydelse.", "Presidenten skriver under och lagen gäller.", "Högsta domstolen prövar lagen först."], c: 1,
+    w: ["Båda kamrarna är folkvalda och ungefär lika starka. En lag måste antas i båda.", null, "Presidenten kommer efter senaten, och kan dessutom lägga in veto.", "Domstolen prövar lagar i efterhand, inte innan de beslutas."],
+    f: "I Sverige räcker en omröstning i en kammare. I USA krävs två, och båda kamrarna måste säga ja till exakt samma text." },
+  { a: "kong", q: "Wyoming har en enda plats i representanthuset och Kalifornien har 52. Hur många senatorer har de?",
+    o: ["Wyoming har en och Kalifornien har 52.", "Det beror på valresultatet.", "Två var.", "Wyoming har en och Kalifornien har tio."], c: 2,
+    w: ["Det är fördelningen i representanthuset, som går efter folkmängd.", "Antalet senatorer är fast och påverkas inte av valresultatet.", null, "Senaten fördelas inte efter folkmängd över huvud taget."],
+    f: "Representanthuset har 435 platser efter folkmängd. Senaten har 100 platser, två per delstat. Det är kompromissen från 1787 mellan stora och små delstater." },
+  { a: "kong", q: "Ett lagförslag har stöd av 58 av 100 senatorer. Vad kan minoriteten göra?",
+    o: ["Ingenting, eftersom 58 är en majoritet.", "Lägga in veto mot förslaget.", "Begära att Högsta domstolen prövar förslaget först.", "Blockera förslaget med filibuster, eftersom det krävs 60 röster för att tvinga fram en omröstning."], c: 3,
+    w: ["I senaten räcker det inte alltid med majoritet. 41 senatorer räcker för att stoppa ett förslag.", "Veto har bara presidenten.", "Domstolen prövar lagar efter beslut, och bara om de strider mot konstitutionen.", null],
+    f: "Filibustern innebär att minoriteten aldrig låter debatten ta slut. Budget och domarutnämningar är undantagna." },
+  { a: "kong", q: "Vilket påstående om riksdagen stämmer?",
+    o: ["Riksdagen har en kammare sedan 1971, och förslagen bereds i utskott innan kammaren röstar.", "Riksdagen har två kamrar, precis som kongressen.", "Utskotten fattar de slutliga besluten om nya lagar.", "Regeringen röstar om lagförslagen i kammaren."], c: 0,
+    w: [null, "Sverige hade två kamrar före 1971. Sedan dess finns en.", "Utskotten bereder förslagen. Besluten tas i kammaren.", "Det är riksdagens 349 ledamöter som röstar. Regeringen lämnar en proposition och verkställer sedan beslutet."],
+    f: "Vägen till en lag i Sverige: regeringen lämnar en proposition, ett utskott bereder den, kammaren röstar och regeringen verkställer. Ett beslut, en kammare, en omröstning." },
+
+  // ---------- val ----------
+  { a: "val", q: "Ett parti får 3,8 procent av rösterna i ett svenskt riksdagsval. Hur många mandat får det?",
+    o: ["Ungefär 13", "Inga alls", "Mandat i de valkretsar där det gick bäst", "Utjämningsmandat, men inga fasta mandat"], c: 1,
+    w: ["Du har räknat proportionellt men glömt spärren. 3,8 procent av 349 blir ungefär 13, men spärren stänger ute partiet.", null, "Spärren gäller rösterna i hela landet, inte valkrets för valkrets.", "Utjämningsmandaten rättar till proportionerna mellan partier som har klarat spärren. De kringgår inte spärren."],
+    f: "Spärren är fyra procent av rösterna i hela landet. Rösterna flyttas inte till något annat parti. De ger ingen representation alls." },
+  { a: "val", q: "Ett land har tio platser. Parti A får 40 procent, B 30, C 20 och D 10. Hur fördelas platserna vid proportionella val?",
+    o: ["A 10, övriga 0", "A 5, B 3, C 2, D 0", "A 4, B 3, C 2, D 1", "A 4, B 3, C 3, D 0"], c: 2,
+    w: ["Så blir det vid majoritetsval i tio enmansvalkretsar där A är störst överallt.", "Andelen platser ska motsvara andelen röster. 40 procent av tio är fyra.", null, "C fick 20 procent, alltså två platser. D:s tio procent ger en plats."],
+    f: "Vid proportionella val ger andelen röster lika stor andel av platserna. Fyrtio procent av tio platser är fyra." },
+  { a: "val", q: "Vilken spärr har Tyskland, och vad har den med historien att göra?",
+    o: ["Fyra procent, samma som Sverige, för att hålla ute småpartier.", "Två procent, för att släppa in många partier.", "Ingen spärr alls, eftersom landet har personval.", "Fem procent. Den har sin bakgrund i Weimarrepubliken, då partisplittringen bidrog till att nazisterna kunde ta makten."], c: 3,
+    w: ["Sverige har fyra procent. Tyskland har fem.", "Två procent är Danmarks spärr.", "Det är Nederländerna och Finland som saknar formell spärr. I Tyskland avgör partirösten fördelningen mellan partierna.", null],
+    f: "Spärrar i Europa: Nederländerna har ingen formell spärr, Danmark 2 procent, Sverige 4, Tyskland 5 och Turkiet 7." },
+  { a: "val", q: "Vad är, enligt boken, nackdelen med proportionella val?",
+    o: ["Det kan bli svårt att bilda en stark regering.", "Små partier har svårt att komma in.", "Väljarna kan bara rösta på personer.", "Ett parti med flest röster kan få färst platser."], c: 0,
+    w: [null, "Det gäller majoritetsval. Proportionella val släpper in också små partier.", "Vid proportionella val representerar de valda ett parti. Vid majoritetsval går rösten till en person.", "Det kan hända vid majoritetsval i enmansvalkretsar."],
+    f: "Proportionalismen är rättvis, men kan göra det svårt att bilda en stark regering. Den leder i allmänhet till flerpartisystem och koalitioner." },
+
+  // ---------- maj ----------
+  { a: "maj", q: "Ett brittiskt parti får tolv procent av rösterna men kommer tvåa i nästan varje valkrets. Hur många platser får det?",
+    o: ["Ungefär tolv procent av platserna", "Inga, eftersom det ligger under spärren", "Nästan inga", "Platser i de valkretsar där det kom tvåa"], c: 2,
+    w: ["Det är proportionellt räknande. Vid majoritetsval räknas bara förstaplatsen i varje valkrets.", "Storbritannien har ingen spärr. Majoritetsvalet stänger redan ute de små partierna.", null, "Den som kommer tvåa får ingenting, hur nära det än var."],
+    f: "Storbritannien har 650 valkretsar med ett mandat i varje. Boken tar Liberaldemokraterna som exempel: väljare överallt, men tvåa eller trea nästan överallt." },
+  { a: "maj", q: "Ett parti får 20 procent av rösterna, jämnt spritt över alla valkretsar. Hur går det i de två valsystemen?",
+    o: ["Ungefär 20 procent av platserna i båda systemen", "Fler platser vid majoritetsval, eftersom rösterna är jämnt spridda", "Inga platser i något av systemen", "Ungefär 20 procent av platserna proportionellt, men nära noll vid majoritetsval"], c: 3,
+    w: ["Systemen ger olika utfall för samma röster. Det är räknesättet som skiljer.", "Jämn spridning är en nackdel vid majoritetsval. Partiet blir inte störst i någon valkrets.", "20 procent klarar alla spärrar. Det är vid majoritetsval partiet får nästan ingenting.", null],
+    f: "Vid majoritetsval avgör var rösterna ligger. Jämnt spridda röster vinner inga enskilda valkretsar." },
+  { a: "maj", q: "Varför leder majoritetsval ofta till tvåpartisystem?",
+    o: ["En röst på ett tredje parti ger sällan någon plats, så väljarna byter till det näst bästa alternativet.", "Grundlagen tillåter bara två partier i sådana länder.", "Spärren är högre än i proportionella system.", "Väljarna har två röster var."], c: 0,
+    w: [null, "Det finns inget sådant förbud. Storbritannien har flera partier i parlamentet, men två dominerar.", "Länder med majoritetsval behöver ingen spärr. Systemet stänger ute småpartierna ändå.", "Väljaren har en röst, som går till en person i den egna valkretsen."],
+    f: "Den som kommer tvåa får ingenting. Därför samlas väljarna kring de två partier som har chans att vinna." },
+  { a: "maj", q: "Parti A får 55 procent av rösterna i en delstat men bara 4 av 12 platser. Vad är den troligaste förklaringen?",
+    o: ["Spärren stängde ute parti A i åtta valkretsar.", "Gränserna är ritade så att A:s väljare är samlade i ett fåtal valkretsar.", "Utjämningsmandaten gick till parti B.", "Rösterna räknades fel."], c: 1,
+    w: ["USA har ingen spärr.", null, "Utjämningsmandat är ett svenskt verktyg och finns inte i USA. Den förväxlingen brukar komma på provet.", "Vid gerrymandering räknas varje röst korrekt. Det är bara gränserna som har ändrats."],
+    f: "Det kallas packing: motståndarens väljare samlas i några få valkretsar där de vinner stort, och i resten blir de för få." },
+  { a: "maj", q: "Vad menas med cracking?",
+    o: ["Att samla motståndarens väljare i ett fåtal valkretsar", "Att flytta väljare mellan delstater", "Att sprida ut motståndarens väljare över många valkretsar så att de aldrig blir flest", "Att stryka väljare ur röstlängden"], c: 2,
+    w: ["Det är packing.", "Inga väljare flyttas vid gerrymandering. Bara gränserna dras om.", null, "Gerrymandering handlar om var gränserna går. Alla röster räknas."],
+    f: "Gränserna ritas oftast av delstaternas egna parlament. Med cracking kunde parti A i övningen få alla fem platser med 60 procent av rösterna." },
+
+  // ---------- pres ----------
+  { a: "pres", q: "En delstat har 20 elektorer. Kandidat A får 51 procent av rösterna och B får 49 procent. Hur fördelas elektorerna?",
+    o: ["A får 10 och B får 10.", "A får 11 och B får 9.", "Det blir omval i delstaten.", "A får alla 20."], c: 3,
+    w: ["Elektorerna delas inte efter röstandel.", "Det vore en proportionell fördelning. Så går det inte till i 48 av 50 delstater.", "Ett knappt resultat leder inte till omval. Vinnaren tar allt, hur knappt det än är.", null],
+    f: "I 48 av 50 delstater tar vinnaren samtliga elektorer. Det är samma princip som en enmansvalkrets, fast på delstatsnivå." },
+  { a: "pres", q: "Varför har Kalifornien fler elektorer än Wyoming?",
+    o: ["Varje delstat har lika många elektorer som ledamöter i kongressen, och Kalifornien har fler ledamöter i representanthuset.", "Elektorerna fördelas efter hur många som röstade i förra valet.", "Kalifornien har fler senatorer.", "Presidenten bestämmer antalet elektorer inför varje val."], c: 0,
+    w: [null, "Antalet bygger på platserna i kongressen, inte på valdeltagandet.", "Alla delstater har två senatorer.", "Presidenten har ingen makt över valsystemet."],
+    f: "Elektorerna räknas fram ur kongressen: representanthuset plus senaten. Totalt finns 538 elektorer, och 270 krävs för att vinna." },
+  { a: "pres", q: "Kandidat B fick 60 av 100 röster i landet men förlorade presidentvalet. Vilken förklaring stämmer?",
+    o: ["Elektorerna röstade mot sina väljare.", "B vann en stor delstat stort och förlorade två jämna delstater knappt.", "B kom inte över spärren i tillräckligt många delstater.", "Delstaterna räknade rösterna på olika sätt."], c: 1,
+    w: ["Elektorerna röstar i praktiken som delstaten.", null, "USA har ingen spärr. Det är ett svenskt verktyg.", "Rösterna räknas korrekt. Det är räknesättet som ger utfallet."],
+    f: "B:s röster utöver vad som behövdes i den stora delstaten gav ingenting. Enligt häftet har en kandidat vunnit med färre röster år 2000 och 2016." },
+  { a: "pres", q: "Hur utses partiernas presidentkandidater i USA?",
+    o: ["Partiledningen väljer den kandidat den tror mest på.", "Elektorerna nominerar kandidaterna.", "I primärval där vanliga väljare deltar, delstat för delstat under våren.", "Partiernas medlemmar röstar, som i Sverige."], c: 2,
+    w: ["Partiledningen kontrollerar inte vem som blir kandidat. Det är häftets huvudpoäng om primärvalen.", "Elektorerna röstar först efter valet i november.", null, "I Sverige utser medlemmarna kandidaterna. I USA deltar vanliga väljare."],
+    f: "I vissa delstater hålls valmöten, caucuses. Den som förlorar de första primärvalen ger ofta upp i brist på pengar." },
+
+  // ---------- makt ----------
+  { a: "makt", q: "Presidentens parti förlorar majoriteten i kongressen. Vad händer med presidenten?",
+    o: ["Presidenten måste avgå.", "Det blir nyval inom tre månader.", "Kongressen utser en ny president.", "Presidenten sitter kvar hela mandatperioden."], c: 3,
+    w: ["Så fungerar parlamentarism, där regeringen faller utan parlamentets stöd. Presidenten är vald i ett eget val.", "Nyval hör till det svenska systemet. I USA är valdagarna fasta.", "Kongressen kan inte utse eller avsätta presidenten, bortsett från riksrätt.", null],
+    f: "Presidenten sitter kvar men får svårt att få igenom sin politik och får förlita sig på vetot och exekutiva order. I Sverige är regeringen beroende av parlamentet, i USA av presidenten." },
+  { a: "makt", q: "Kongressen vill köra över presidentens veto. Vad krävs?",
+    o: ["Två tredjedelar av ledamöterna i båda kamrarna", "Enkel majoritet i båda kamrarna", "Två tredjedelar i senaten", "60 av 100 senatorer"], c: 0,
+    w: [null, "Enkel majoritet räcker för att anta en lag, men inte för att bryta ett veto.", "Det krävs två tredjedelar i båda kamrarna, inte bara i senaten.", "60 röster gäller filibustern i senaten, inte vetot."],
+    f: "Därför bryts vetot sällan. Det var en av de frågor klassen hade svårast för på kryssförhöret." },
+  { a: "makt", q: "Presidenten vill utse en ny domare i Högsta domstolen. Vem kan stoppa utnämningen?",
+    o: ["Representanthuset", "Senaten", "Högsta domstolen själv", "Ingen, presidenten bestämmer själv"], c: 1,
+    w: ["Representanthuset har ingen roll vid utnämningar.", null, "Domstolen har ingen makt över vem som utses.", "Utnämningen måste godkännas."],
+    f: "Senaten godkänner presidentens utnämningar av ministrar, högre tjänstemän och domare, och ratificerar avtal med andra länder." },
+  { a: "makt", q: "Vilket av följande kan presidenten inte göra?",
+    o: ["Utfärda exekutiva order", "Lägga in veto mot ett lagförslag", "Upplösa kongressen", "Utnämna ministrar"], c: 2,
+    w: ["Det är ett av presidentens tre verktyg: beslut utan kongressen.", "Det är ett av presidentens tre verktyg.", null, "Det är ett av presidentens tre verktyg."],
+    f: "Presidentens tre verktyg är veto, utnämningar och exekutiva order. Presidenten kan inte upplösa kongressen och kan inte lägga fram lagförslag själv." },
+  { a: "makt", q: "Riksrätt har använts fyra gånger, men ingen president har fällts. Vad säger det om kongressens kontroll?",
+    o: ["Riksrätt kräver bara enkel majoritet, men ingen har röstat för.", "Högsta domstolen har stoppat alla fyra.", "Presidenterna har aldrig gjort något som kunde leda till riksrätt.", "Kontrollen är starkare på papperet än i praktiken, eftersom det krävs två tredjedelar i senaten."], c: 3,
+    w: ["Det krävs två tredjedelar i senaten för en fällande dom.", "Domstolen avgör inte riksrätt. Det gör kongressen.", "Riksrätt har använts fyra gånger, så frågan har prövats.", null],
+    f: "Så stor enighet finns nästan aldrig när partierna står mot varandra. Det är ett bra resonemang att använda på provet." },
+
+  // ---------- domst ----------
+  { a: "domst", q: "Högsta domstolen förklarar en lag grundlagsstridig. Vad händer med lagen?",
+    o: ["Kongressen måste rösta om den igen.", "Presidenten avgör om den ska gälla.", "Den gäller i de delstater som vill behålla den.", "Den blir ogiltig och gäller inte längre."], c: 3,
+    w: ["Domstolen skickar inte tillbaka lagen. Den upphäver den.", "Det blandar ihop lagprövning med veto, som kommer före beslutet.", "Det blandar ihop lagprövning med federalism.", null],
+    f: "Lagprövningsrätten är domstolens viktigaste maktmedel. Den kan förklara lagar och beslut grundlagsstridiga och därmed ogiltiga." },
+  { a: "domst", q: "Var kommer Högsta domstolens lagprövningsrätt ifrån?",
+    o: ["Domstolen tog sig den själv i målet Marbury mot Madison 1803.", "Den står i konstitutionen från 1787.", "Kongressen gav domstolen rätten i en lag.", "Den infördes i Bill of Rights 1791."], c: 0,
+    w: [null, "Rätten står inte i konstitutionen. Det är just därför fallet är intressant.", "Ingen lag gav domstolen rätten. Därför kan den inte heller tas bort genom en lag.", "Bill of Rights skyddar rättigheter som yttrandefrihet. Lagprövningsrätten står inte där."],
+    f: "Domstolen gav alltså sig själv sin största makt. I praktiken kan ingen ta ifrån den rätten." },
+  { a: "domst", q: "Vad är den viktigaste skillnaden mellan lagprövning i Sverige och i USA?",
+    o: ["Sverige saknar lagprövning helt.", "I Sverige granskar Lagrådet förslaget före beslut och yttrandet är ett råd. I USA prövas lagen efteråt och domen gäller.", "I Sverige kan domstolarna riva upp lagar som gällt i femtio år.", "I USA granskas alla lagar innan de beslutas."], c: 1,
+    w: ["Lagprövning finns i regeringsformen, men den används sparsamt.", null, "Det beskriver USA, till exempel Dobbs 2022.", "I USA sker prövningen efter beslutet, och bara när ett mål kommer upp."],
+    f: "Domarna i USA nomineras av presidenten, godkänns av senaten och sitter på livstid. En president som utser flera domare präglar domstolen i decennier." },
+  { a: "domst", q: "En stat håller val vart fjärde år, men domstolarna styrs av regeringen och lagar ändras i efterhand. Vad stämmer?",
+    o: ["Staten är en rättsstat, eftersom den håller val.", "Staten är en demokrati och därmed också en rättsstat.", "Staten är inte en rättsstat, även om den håller val.", "Det går inte att avgöra utan att veta statsformen."], c: 2,
+    w: ["Val gör inte domstolarna oberoende. Rättsstat och demokrati hänger ihop, men de är olika saker.", "Samma fel: val räcker inte. Rättsstaten kräver oberoende domstolar och lagar som inte gäller bakåt.", null, "Statsformen säger bara hur statschefen utses."],
+    f: "I en rättsstat gäller lagarna lika för alla, även makthavare lyder lagen och domstolarna är oberoende. Rättssäkerhet betyder att du vet i förväg vad som är förbjudet." },
+  { a: "domst", q: "Riksdagen inför en ny avgift och låter den gälla från och med förra året. Vilken rättsstatsprincip bryts?",
+    o: ["Att domstolarna ska vara oberoende.", "Att lagar inte ska gälla bakåt i tiden.", "Att alla är lika inför lagen.", "Att även makthavare lyder under lagen."], c: 1,
+    w: ["Domstolarnas ställning påverkas inte av när en lag börjar gälla.", null, "Avgiften gäller alla lika. Problemet är tidpunkten, inte vilka som träffas.", "Riksdagen följer sin egen lag. Problemet är att den gäller bakåt."],
+    f: "Retroaktiv lagstiftning gör att du inte kan veta i förväg vad som är tillåtet. Det slår mot själva kärnan i rättssäkerheten." },
+  { a: "domst", q: "En minister bryter mot lagen men åtalas aldrig, eftersom hon är minister. Vilken rättsstatsprincip bryts?",
+    o: ["Att även makthavare lyder under lagen.", "Att lagar inte gäller bakåt i tiden.", "Att domstolarna är oberoende.", "Att du har rätt till en rättvis rättegång."], c: 0,
+    w: [null, "Ingen lag har ändrats i efterhand här.", "Domstolen har inte fått någon order. Problemet är att saken aldrig kommer dit.", "Rätten till rättvis rättegång gäller den som åtalas. Här uteblir åtalet."],
+    f: "Lagen ska gälla lika för alla, också för dem som stiftar den. Undantag för makthavare är ett av de tydligaste tecknen på att en stat inte är en rättsstat." },
+
+  // ---------- ratt ----------
+  { a: "ratt", q: "Svarta män fick rösträtt i USA:s grundlag på 1860-talet men kunde inte rösta i sydstaterna på nästan hundra år. Varför?",
+    o: ["Grundlagen gällde inte i sydstaterna.", "Delstaterna införde regler som formellt var neutrala men användes selektivt.", "Rösträtten togs bort genom ett nytt tillägg.", "Högsta domstolen förklarade rösträtten ogiltig."], c: 1,
+    w: ["Grundlagen gällde, men ingen såg till att den följdes.", null, "Rätten fanns kvar i grundlagen hela tiden.", "Rätten fanns kvar hela tiden. Domstolen upphävde den inte."],
+    f: "Läskunnighetsprov, valskatter, hot och trakasserier höll svarta väljare borta. Det ändrades med det 24:e tillägget 1964 och Voting Rights Act 1965." },
+  { a: "ratt", q: "Före 1918 kunde den med högre inkomst ha fler röster i kommunalvalen. Vilken princip bröt det mot?",
+    o: ["Lika rösträtt", "Allmän rösträtt", "Rättssäkerhet", "Proportionella val"], c: 0,
+    w: [null, "Allmän rösträtt handlar om vilka som får rösta. Här gäller det hur mycket varje röst väger.", "Rättssäkerhet handlar om lagar och domstolar, inte om hur rösterna väger.", "Proportionella val handlar om hur röster blir mandat."],
+    f: "Allmän: alla vuxna medborgare får rösta. Lika: varje röst väger lika mycket. Beslutet om allmän och lika rösträtt togs 1918–1921, och kvinnor röstade i riksdagsval första gången 1921." },
+  { a: "ratt", q: "Vad är den viktigaste skillnaden i skyddet för mänskliga rättigheter mellan Sverige och USA?",
+    o: ["USA saknar skrivna rättigheter.", "Dödsstraff är förbjudet i hela USA.", "Barnkonventionen är lag i båda länderna.", "En svensk kan gå till Europadomstolen. En amerikan har ingen motsvarande instans utanför landet."], c: 3,
+    w: ["USA har Bill of Rights från 1791.", "Dödsstraff finns federalt och i ungefär hälften av delstaterna.", "USA har undertecknat men inte ratificerat barnkonventionen, som enda FN-land.", null],
+    f: "Europakonventionen är svensk lag sedan 1995, och en enskild kan åberopa den i svensk domstol. En rättighet som ingen kan utkräva är inte värd mycket." },
+
+  // ---------- med ----------
+  { a: "med", q: "Vilket yttrande är tillåtet i USA men kan vara ett brott i Sverige?",
+    o: ["En direkt uppmaning till omedelbart våld", "Hatiskt tal mot en folkgrupp som inte uppmanar till omedelbart våld", "Hård kritik mot regeringen", "En tidningsartikel som granskar en minister"], c: 1,
+    w: ["Där går gränsen även i USA.", null, "Kritik mot regeringen är tillåten i båda länderna.", "Granskning av makthavare är tillåten i båda länderna."],
+    f: "First Amendment förbjuder kongressen att stifta lagar som inskränker yttrandefriheten. Svensk hets mot folkgrupp saknar amerikansk motsvarighet. Det amerikanska skyddet är alltså starkare." },
+  { a: "med", q: "Lokaltidningar läggs ned i stora delar av USA. Varför spelar det roll för demokratin enligt häftet?",
+    o: ["Färre journalister betyder färre jobb.", "Tidningar är billigare för läsarna än tv.", "Väljare kan bara utkräva ansvar för sådant de känner till.", "Utan tidningar blir valdeltagandet olagligt lågt."], c: 2,
+    w: ["Det stämmer, men det säger inget om demokratin.", "Priset har inget med demokratin att göra.", null, "Det finns inget lägsta tillåtna valdeltagande."],
+    f: "USA saknar public service av svensk modell, presstöd och tryckfrihetsförordning. Marknaden avgör utbudet, och många saknar i dag nyhetsbevakning av sin egen kommun." },
+  { a: "med", q: "Vad menas med mediernas granskande uppgift?",
+    o: ["Att rapportera vad makthavarna säger och gör.", "Att undersöka hur makten används, också när makthavarna helst slipper det.", "Att ge plats åt debattartiklar från olika håll.", "Att kontrollera att valen går rätt till."], c: 1,
+    w: ["Det är att informera. Granskningen går ett steg längre och letar efter det som inte berättas frivilligt.", null, "Det är forumuppgiften, alltså att vara en plats där olika åsikter möts.", "Valen kontrolleras av valmyndigheten och domstolarna."],
+    f: "Medierna brukar beskrivas med tre uppgifter: informera, granska och vara ett forum för debatt. Det är granskningen som gett pressen namnet tredje statsmakten." },
+  { a: "med", q: "Nyhetsmedierna rapporterar i en vecka om gängvåld. Efteråt säger fler väljare att brottsligheten är den viktigaste frågan. Vad kallas det?",
+    o: ["Filterbubbla", "Dagordningsfunktionen", "Propaganda", "Opinionsmätning"], c: 1,
+    w: ["En filterbubbla handlar om att du bara möter åsikter du redan håller med om.", null, "Propaganda är medvetet vinklad information i ett bestämt syfte. Att rapportera om ett ämne är inte det.", "En opinionsmätning mäter vad väljarna tycker. Den skapar inte frågan."],
+    f: "Medierna bestämmer inte vad vi tycker, men i hög grad vad vi tycker om. Det som inte rapporteras hamnar sällan på väljarnas dagordning." },
+  { a: "med", q: "Allt fler får sina nyheter genom flödet i sociala medier. Vad är problemet för demokratin?",
+    o: ["Nyheterna blir dyrare för läsaren.", "Det finns för få nyheter att välja mellan.", "Det finns ingen ansvarig utgivare, och flödet väljs efter vad som engagerar snarare än efter vad som är viktigt eller sant.", "Sociala medier når bara unga."], c: 2,
+    w: ["Flödet är gratis. Priset är inte problemet.", "Utbudet är större än någonsin. Problemet är urvalet.", null, "Alla åldersgrupper använder sociala medier som nyhetskälla."],
+    f: "En svensk tidning har en ansvarig utgivare som kan ställas till svars för det som publiceras. Ett flöde har en algoritm, och den sorterar efter uppmärksamhet." },
+
+  // ---------- dem ----------
+  { a: "dem", q: "Vilket av följande är inte ett av demokratins sex krav?",
+    o: ["Valhemlighet", "Proportionellt valsystem", "Fri opinionsbildning", "Regelbundna val och fri partibildning"], c: 1,
+    w: ["Valhemlighet är ett av de sex kraven. Ingen ska behöva avslöja vem hen röstar på.", null, "Fri opinionsbildning är ett av de sex kraven.", "Det är ett av de sex kraven."],
+    f: "De sex kraven är regelbundna val och fri partibildning, allmän och lika rösträtt, valhemlighet, fri opinionsbildning, majoritetsprincipen och rättssäkerhet. Valsystemet är inte ett av dem. Både proportionella val och majoritetsval används i demokratier." },
+  { a: "dem", q: "Ett land håller val vart fjärde år, men bara ett parti får ställa upp. Vilket av de sex kraven bryts?",
+    o: ["Regelbundna val och fri partibildning", "Allmän och lika rösträtt", "Valhemlighet", "Majoritetsprincipen"], c: 0,
+    w: [null, "Alla vuxna får rösta i exemplet. Problemet är vad de kan rösta på.", "Inget i exemplet säger att valet är öppet.", "Majoritetens förslag kan mycket väl vinna. Problemet ligger före omröstningen."],
+    f: "Kravet har två delar: valen ska hållas regelbundet och det ska finnas minst två alternativ. Det ska dessutom vara tillåtet att bilda partier. Ett val med en enda kandidat uppfyller bara halva kravet." },
+  { a: "dem", q: "Väljarna måste visa sin ifyllda valsedel för en tjänsteman innan de lägger den i urnan. Rösterna räknas korrekt. Vilket krav bryts?",
+    o: ["Inget. Rösterna räknas ju rätt.", "Valhemlighet", "Allmän och lika rösträtt", "Rättssäkerhet"], c: 1,
+    w: ["Räkningen är bara en del. Hur rösten lämnas är ett eget krav.", null, "Alla får fortfarande rösta, och varje röst väger lika mycket.", "Rättssäkerhet handlar om att ingen häktas eller straffas utan stöd i lagen."],
+    f: "Ingen ska behöva avslöja vilket parti eller vilken kandidat hen röstar på. Utan valhemlighet kan en arbetsgivare, en granne eller staten utkräva hur du röstade, och då är rösten inte fri." },
+  { a: "dem", q: "Varför räcker det inte att ett land håller val för att det ska räknas som en demokrati?",
+    o: ["Alla sex kraven måste vara uppfyllda, till exempel fri opinionsbildning och rättssäkerhet.", "Landet måste också vara en republik.", "Valsystemet måste också vara proportionellt.", "Valdeltagandet måste också vara över 50 procent."], c: 0,
+    w: [null, "Statsformen avgör inte saken. Sverige är både monarki och demokrati.", "Både proportionella val och majoritetsval används i demokratier.", "Det finns inget lägsta valdeltagande."],
+    f: "Kraven hänger ihop. Utan fri opinionsbildning vet väljarna inte vad de röstar om, och utan rättssäkerhet finns inget skydd för den som röstar på fel parti. Val utan de övriga kraven är inte fria val." },
+  { a: "dem", q: "Vad menas med fri opinionsbildning?",
+    o: ["Att det finns flera partier i parlamentet.", "Att staten äger medierna så att alla åsikter får plats.", "Att alla fritt får bilda sig en uppfattning och föra fram den.", "Att opinionsmätningar publiceras före valet."], c: 2,
+    w: ["Antalet partier avgörs av valsystemet och spärren, inte av det här kravet.", "Statligt ägda medier är snarare ett tecken på motsatsen.", null, "Opinionsmätningar är inget krav. De mäter en uppfattning som redan har bildats."],
+    f: "Kravet har två led: att bilda sig en uppfattning och att få föra fram den. Rösträtten är verktyget, den fria informationen är underlaget. En väljare som inte vet vad regeringen har gjort kan rösta, men inte utkräva ansvar." },
+  { a: "dem", q: "En majoritet i parlamentet röstar för att förbjuda det största oppositionspartiet. Beslutet fattas i rätt ordning. Vad är problemet?",
+    o: ["Inget. Majoritetsprincipen betyder att majoriteten bestämmer.", "Beslutet bryter mot kravet på regelbundna val och fri partibildning, och är ett exempel på majoritetens tyranni.", "Beslutet bryter mot valhemligheten.", "Beslutet är giltigt så länge en domstol godkänner det."], c: 1,
+    w: ["Majoritetsprincipen gäller inom demokratins ramar, inte över dem.", null, "Ingen tvingas avslöja hur hen röstar.", "Ett godkännande gör inte beslutet demokratiskt. Frågan är vad en majoritet får besluta om."],
+    f: "En liberal demokrati är de sex kraven plus skydd för mänskliga rättigheter och rättsstatens principer. Utan det skyddet finns risk för majoritetens tyranni. I en demokrati är oppositionen en nödvändighet, i en diktatur ett hot." },
+  { a: "dem", q: "En person sitter frihetsberövad i ett år utan att åtal väcks och utan att någon lag pekas ut. Vilket av de sex kraven bryts?",
+    o: ["Rättssäkerhet", "Fri opinionsbildning", "Majoritetsprincipen", "Allmän och lika rösträtt"], c: 0,
+    w: [null, "Fri opinionsbildning handlar om rätten att bilda och föra fram en uppfattning. Här gäller det frihetsberövandet i sig.", "Inget förslag har röstats om.", "Rösträtten berörs inte av ett frihetsberövande."],
+    f: "Rättssäkerhet betyder att ingen häktas eller straffas utan stöd i lagen. Kravet finns med bland de sex just därför att val utan rättssäkerhet inte skyddar den som kritiserar makten." },
+  { a: "dem", q: "Vad menas med pluralism?",
+    o: ["Att parlamentet har flera kamrar.", "Att många olika uppfattningar får finnas och konkurrera om makten, och att makten aldrig koncentreras till en grupp.", "Att flera länder samarbetar i en union.", "Att väljaren får rösta på flera partier samtidigt."], c: 1,
+    w: ["Antalet kamrar är en fråga om statsskick.", null, "Pluralism handlar om uppfattningarna inom ett land.", "Väljaren lägger en röst på ett parti."],
+    f: "Ordet kommer av latinets plures, som betyder många. En demokrati ser oppositionen som en nödvändighet. En diktatur ser den som ett hot." },
+];
+
+
+const el = id => document.getElementById(id);
+const LETTERS = ["1", "2", "3", "4"];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+let queue, pos, first, need, seen, total, stage, order, chosen, cur;
+
+function startSession(ids) {
+  queue = shuffle(ids); pos = 0; first = {}; need = {}; seen = new Set(); total = ids.length;
+  el("start").hidden = true; el("result").hidden = true; el("quiz").hidden = false;
+  render();
+}
+
+function insertLater(id, gap) {
+  const at = Math.min(pos + 1 + gap, queue.length);
+  queue.splice(at, 0, id);
+}
+
+function render() {
+  if (pos >= queue.length) return finish();
+  cur = queue[pos]; const q = Q[cur];
+  const repeat = seen.has(cur);
+  stage = "think"; chosen = null;
+  order = shuffle([0, 1, 2, 3]);
+  const done = Object.keys(first).length + (repeat ? 0 : 1);
+  el("prog").textContent = repeat ? "Repetition" : "Fråga " + done + " av " + total;
+  const pending = Object.values(need).filter(n => n > 0).length;
+  el("queueInfo").textContent = pending ? pending + " fel att svara rätt på igen" : "";
+  el("barFill").style.width = (Object.keys(first).length / total * 100) + "%";
+  el("again").hidden = !repeat;
+  el("areaTag").hidden = true;
+  el("qtext").textContent = q.q;
+  el("thinkBox").hidden = false; el("showRow").hidden = false;
+  el("opts").hidden = true; el("answerRow").hidden = true; el("fb").hidden = true;
+  el("sureBtn").disabled = true; el("guessBtn").disabled = true;
+  const box = el("opts"); box.innerHTML = "";
+  order.forEach((oi, k) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.type = "button";
+    const key = document.createElement("span"); key.className = "k"; key.textContent = LETTERS[k];
+    const t = document.createElement("span"); t.textContent = q.o[oi];
+    b.append(key, t);
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  el("showBtn").focus({ preventScroll: true });
+  window.scrollTo({ top: 0 });
+}
+
+function showOptions() {
+  if (stage !== "think") return;
+  stage = "choose";
+  el("thinkBox").hidden = true; el("showRow").hidden = true;
+  el("opts").hidden = false; el("answerRow").hidden = false;
+}
+
+function choose(k) {
+  if (stage !== "choose") return;
+  chosen = k;
+  [...el("opts").children].forEach((b, i) => b.classList.toggle("chosen", i === k));
+  el("sureBtn").disabled = false; el("guessBtn").disabled = false;
+}
+
+function submit(sure) {
+  if (stage !== "choose" || chosen === null) return;
+  stage = "feedback";
+  const q = Q[cur]; const picked = order[chosen]; const ok = picked === q.c;
+  const repeat = seen.has(cur);
+  if (!repeat) { first[cur] = { ok, sure }; seen.add(cur); }
+  if (ok) {
+    if (need[cur] > 0) { need[cur]--; if (need[cur] > 0) insertLater(cur, 6); }
+  } else {
+    need[cur] = 2; insertLater(cur, 4);
+  }
+  [...el("opts").children].forEach((b, i) => {
+    b.disabled = true; b.classList.remove("chosen");
+    if (order[i] === q.c) b.classList.add("right");
+    else if (i === chosen) b.classList.add("wrong");
+  });
+  el("answerRow").hidden = true;
+  el("areaTag").textContent = AREAS[q.a].name; el("areaTag").hidden = false;
+  const v = el("verdict");
+  if (ok) {
+    v.className = "verdict ok";
+    v.textContent = need[cur] > 0 ? "Rätt. Svara rätt en gång till, så är frågan klar." : (sure ? "Rätt, och du var säker." : "Rätt, men du gissade. Läs förklaringen så att du vet varför.");
+  } else {
+    v.className = "verdict bad";
+    v.textContent = sure ? "Fel, fast du var säker. Det här är en missuppfattning att rätta till." : "Fel.";
+  }
+  el("whyWrong").hidden = ok;
+  if (!ok) { el("whyWrong").innerHTML = ""; const b = document.createElement("b"); b.textContent = "Därför är ditt svar fel: "; el("whyWrong").append(b, document.createTextNode(q.w[picked])); }
+  el("explain").innerHTML = ""; const b2 = document.createElement("b"); b2.textContent = "Rätt svar: ";
+  const ans = q.o[q.c].replace(/\.$/, "") + ".";
+  const fp = document.createElement("span"); fp.style.display = "block"; fp.style.marginTop = "6px"; fp.textContent = q.f;
+  el("explain").append(b2, document.createTextNode(ans), fp);
+  el("ref").textContent = "Läs: " + AREAS[q.a].ref;
+  el("comeback").hidden = !(need[cur] > 0);
+  el("fb").hidden = false;
+  el("nextBtn").focus({ preventScroll: true });
+}
+
+function next() { if (stage !== "feedback") return; pos++; render(); }
+
+function finish() {
+  el("quiz").hidden = true; el("result").hidden = false;
+  const ids = Object.keys(first).map(Number);
+  const right = ids.filter(i => first[i].ok).length;
+  const pct = Math.round(right / ids.length * 100);
+  el("score").textContent = right + " av " + ids.length;
+  el("scoreNote").textContent = pct >= 85 ? pct + " procent. Mycket starkt på ett svårt quiz." :
+    pct >= 65 ? pct + " procent. Ett bra resultat på det här quizet. Plugga på områdena nedan." :
+    pct + " procent. Quizet är svårt med flit. Följ pluggplanen nedan och gör om quizet om ett par dagar.";
+  const per = {};
+  Object.keys(AREAS).forEach(k => per[k] = { right: 0, total: 0 });
+  ids.forEach(i => { const a = Q[i].a; per[a].total++; if (first[i].ok) per[a].right++; });
+  const rows = el("areaRows"); rows.innerHTML = "";
+  const status = p => p >= .8 ? ["Sitter", "s"] : p >= .5 ? ["Repetera", "r"] : ["Plugga mer", "p"];
+  Object.keys(AREAS).filter(k => per[k].total).forEach(k => {
+    const p = per[k].right / per[k].total; const [label, cls] = status(p);
+    const tr = document.createElement("tr");
+    const a = document.createElement("td"); a.textContent = AREAS[k].name;
+    const n = document.createElement("td"); n.className = "n"; n.textContent = per[k].right + "/" + per[k].total;
+    const s = document.createElement("td"); const pill = document.createElement("span"); pill.className = "pill " + cls; pill.textContent = label; s.appendChild(pill);
+    tr.append(a, n, s); rows.appendChild(tr);
+  });
+  const sw = ids.filter(i => !first[i].ok && first[i].sure);
+  el("sureWrongCard").hidden = sw.length === 0;
+  const ul = el("sureWrong"); ul.innerHTML = "";
+  sw.forEach(i => {
+    const li = document.createElement("li"); const b = document.createElement("b"); b.textContent = Q[i].q;
+    const s = document.createElement("span"); s.textContent = "Rätt svar: " + Q[i].o[Q[i].c];
+    li.append(b, s); ul.appendChild(li);
+  });
+  const weak = Object.keys(AREAS).filter(k => per[k].total && per[k].right / per[k].total < .8)
+    .sort((x, y) => per[x].right / per[x].total - per[y].right / per[y].total);
+  const plan = el("plan"); plan.innerHTML = "";
+  if (!weak.length) {
+    el("planHead").textContent = "Alla områden sitter";
+    const li = document.createElement("li"); const b = document.createElement("b"); b.textContent = "Träna på provets skrivfrågor";
+    const s = document.createElement("span"); s.textContent = "Fyll i skrivmallens sex steg för ett av de fyra temana, med ett konkret exempel i steg 4 till 6.";
+    li.append(b, s); plan.appendChild(li);
+  } else {
+    el("planHead").textContent = "Plugga på det här, i den här ordningen";
+    weak.forEach(k => {
+      const li = document.createElement("li"); const b = document.createElement("b");
+      b.textContent = AREAS[k].name + " · " + per[k].right + "/" + per[k].total + " rätt";
+      const s = document.createElement("span"); s.textContent = AREAS[k].plan + " Läs: " + AREAS[k].ref + ".";
+      li.append(b, s); plan.appendChild(li);
+    });
+  }
+  const wrongIds = ids.filter(i => !first[i].ok);
+  el("retryWrong").hidden = wrongIds.length === 0;
+  el("retryWrong").textContent = "Gör om dina " + wrongIds.length + " fel";
+  el("retryWrong").onclick = () => startSession(wrongIds);
+  window.scrollTo({ top: 0 });
+}
+
+el("startBtn").addEventListener("click", () => startSession(Q.map((_, i) => i)));
+el("restart").addEventListener("click", () => startSession(Q.map((_, i) => i)));
+el("showBtn").addEventListener("click", showOptions);
+el("sureBtn").addEventListener("click", () => submit(true));
+el("guessBtn").addEventListener("click", () => submit(false));
+el("nextBtn").addEventListener("click", next);
+document.addEventListener("keydown", e => {
+  if (el("quiz").hidden || e.target.tagName === "INPUT") return;
+  if (stage === "think" && (e.key === " " || e.key === "Enter")) { e.preventDefault(); showOptions(); }
+  else if (stage === "choose" && LETTERS.includes(e.key)) { e.preventDefault(); choose(+e.key - 1); }
+  else if (stage === "choose" && chosen !== null && (e.key === "s" || e.key === "S")) { e.preventDefault(); submit(true); }
+  else if (stage === "choose" && chosen !== null && (e.key === "g" || e.key === "G")) { e.preventDefault(); submit(false); }
+  else if (stage === "feedback" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); next(); }
+});
+</script>
+
+</body>
+</html>
