@@ -1,0 +1,35 @@
+/* Gemensam stil för startsidan och kurssidorna. Skifferblått och guld som i lektionernas bilder. */
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #2B3445; --muted: #5E6878; --line: #DCE0E7;
+  --navy: #37435A; --gold: #B07D1F; --goldbg: #F8ECD6;
+  --font: "Lato", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222; color-scheme: dark }
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+.eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+h1 { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin: 0; line-height: 1.15; text-wrap: balance; }
+h2 { font-size: 1.2rem; color: var(--navy); margin: 12px 0 0; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.back { color: var(--navy); font-weight: 700; text-decoration: none; font-size: .95rem; }
+.back:hover { text-decoration: underline; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+a.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px;
+  display: grid; gap: 6px; align-content: start; text-decoration: none; color: inherit; }
+a.card:hover { border-color: var(--gold); }
+a.card:focus-visible, .back:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+a.card b { color: var(--navy); font-size: 1.15rem; }
+.tag { justify-self: start; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 99px; background: var(--goldbg); color: var(--ink); }
+.empty { background: var(--card); border: 1px dashed var(--line); border-radius: 10px; padding: 20px; color: var(--muted); }
+footer { color: var(--muted); font-size: .85rem; margin-top: 16px; }
+@media (max-width: 480px) { body { font-size: 16px; padding-block: 24px 40px; } h1 { font-size: 1.55rem; } a.card { padding: 16px; } }

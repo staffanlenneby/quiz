@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Komparativa fördelar · räkneövning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #2B3445; --muted: #5E6878; --line: #DCE0E7;
+  --navy: #37435A; --gold: #B07D1F; --goldbg: #F8ECD6;
+  --ok: #2E7D4F; --okbg: #E3F2E9; --bad: #B03A2E; --badbg: #FBE7E4; --sel: #E6EAF2;
+  --font: "Lato", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin: 0; line-height: 1.15; text-wrap: balance; }
+h2 { font-size: 1.3rem; color: var(--navy); margin: 0; }
+.eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 14px; }
+.muted { color: var(--muted); }
+p { margin: 0; }
+.back { color: var(--navy); font-weight: 700; text-decoration: none; font-size: .95rem; }
+.back:hover { text-decoration: underline; }
+.terms { display: grid; gap: 8px; margin: 0; }
+.terms dt { font-weight: 700; color: var(--navy); }
+.terms dd { margin: 0 0 4px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 10px; text-align: left; }
+th { font-size: .85rem; color: var(--muted); font-weight: 700; }
+td:not(:first-child), th:not(:first-child) { text-align: right; }
+.task { background: var(--goldbg); border-radius: 8px; padding: 12px 14px; }
+ol.qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: q; }
+ol.qs > li { counter-increment: q; display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+ol.qs > li:first-child { border-top: 0; padding-top: 0; }
+.qline { display: flex; gap: 10px; }
+.qline::before { content: counter(q); flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center;
+  background: var(--sel); font-weight: 700; font-size: .85rem; margin-top: 1px; }
+.ans { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-left: calc(1.7em + 10px); }
+input.num { font: inherit; width: 7em; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
+input.num:focus-visible, button:focus-visible, textarea:focus-visible, .back:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.unit { color: var(--muted); }
+button { font: inherit; cursor: pointer; border-radius: 8px; border: 1.5px solid transparent; padding: 10px 16px; font-weight: 700; }
+.primary { background: var(--navy); color: var(--card); justify-self: start; }
+.secondary { background: transparent; color: var(--navy); border-color: var(--line); justify-self: start; }
+.choice { background: var(--card); color: var(--ink); border-color: var(--line); font-weight: 400; padding: 8px 14px; }
+.choice.chosen { border-color: var(--navy); background: var(--sel); font-weight: 700; }
+li.right input.num, li.right .choice.chosen { border-color: var(--ok); background: var(--okbg); }
+li.wrong input.num, li.wrong .choice.chosen { border-color: var(--bad); background: var(--badbg); }
+.fb { padding-left: calc(1.7em + 10px); font-size: .95rem; }
+li.right .fb { color: var(--ok); font-weight: 700; }
+li.wrong .fb { color: var(--ink); }
+li.wrong .fb b { color: var(--bad); }
+.status { font-weight: 700; }
+.summary { border-left: 4px solid var(--gold); padding: 4px 0 4px 14px; }
+textarea { font: inherit; width: 100%; min-height: 7em; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); resize: vertical; }
+footer { color: var(--muted); font-size: .85rem; }
+@media (max-width: 480px) { body { font-size: 16px; } h1 { font-size: 1.55rem; } .card { padding: 16px; } .ans, .fb { padding-left: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../../">← Alla kurser</a>
+
+  <section class="card">
+    <span class="eyebrow">Internationell ekonomi · Räkneövning</span>
+    <h1>Absoluta och komparativa fördelar</h1>
+    <p>Två påhittade länder, Nordland och Sydland, tillverkar varor. Du räknar ut hur mycket de kan producera själva och vad som händer när de specialiserar sig. Övningen följer Adam Smiths och David Ricardos teorier om handel.</p>
+    <dl class="terms">
+      <dt>Absolut fördel</dt><dd>Ett land kan producera en vara med mindre arbetstid än ett annat land.</dd>
+      <dt>Komparativ fördel</dt><dd>Ett land kan producera en vara till en lägre alternativkostnad än ett annat land.</dd>
+      <dt>Alternativkostnad</dt><dd>Det man avstår från. Lägger Nordland tid på fisk kan samma tid inte användas till verktyg.</dd>
+      <dt>Specialisering</dt><dd>Ett land lägger all eller nästan all arbetstid på en vara och köper resten från andra länder.</dd>
+    </dl>
+    <p class="muted"><b>Så gör du:</b> Räkna med papper och penna. Skriv in svaren och klicka på Rätta. Blir det fel får du en ledtråd. Decimaler skriver du med komma, till exempel 0,5. Räkna med 30–40 minuter.</p>
+    <p class="muted"><b>Klart när:</b> alla fem delar är rättade och du har skrivit en egen förklaring i del 5.</p>
+  </section>
+
+  <section class="card" data-part="1">
+    <span class="eyebrow">Del 1</span>
+    <h2>Produktion utan handel</h2>
+    <p>Nordland och Sydland har vardera <b>60 timmar</b> arbetstid. De kan tillverka trä eller tyg. Tabellen visar hur många timmar det tar att tillverka <b>en enhet</b> av varje vara.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Land</th><th>Trä (timmar per enhet)</th><th>Tyg (timmar per enhet)</th></tr></thead>
+      <tbody><tr><td>Nordland</td><td>3</td><td>6</td></tr><tr><td>Sydland</td><td>5</td><td>2</td></tr></tbody>
+    </table></div>
+    <p class="task">Länderna handlar inte med varandra. Båda vill klara sig själva och delar därför tiden lika: 30 timmar på trä och 30 timmar på tyg.</p>
+    <ol class="qs"></ol>
+    <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="primary check">Rätta del 1</button> <span class="status"></span></div>
+    <p class="summary" hidden>Skriv upp totalen: <b>16 enheter trä och 20 enheter tyg</b>. I nästa del jämför du med vad som händer när länderna specialiserar sig.</p>
+  </section>
+
+  <section class="card" data-part="2">
+    <span class="eyebrow">Del 2</span>
+    <h2>Absolut fördel</h2>
+    <p>Samma länder, samma varor och samma 60 timmar som i del 1. Nu lägger varje land all tid på den vara det är bäst på.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Land</th><th>Trä (timmar per enhet)</th><th>Tyg (timmar per enhet)</th></tr></thead>
+      <tbody><tr><td>Nordland</td><td>3</td><td>6</td></tr><tr><td>Sydland</td><td>5</td><td>2</td></tr></tbody>
+    </table></div>
+    <ol class="qs"></ol>
+    <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="primary check">Rätta del 2</button> <span class="status"></span></div>
+    <p class="summary" hidden>Jämför med del 1. Utan handel blev det 16 trä och 20 tyg. När länderna specialiserar sig blir det 20 trä och 30 tyg. Båda länderna har arbetat lika länge som förut, men de producerar mer tillsammans. Det är Adam Smiths poäng med absoluta fördelar.</p>
+  </section>
+
+  <section class="card" data-part="3">
+    <span class="eyebrow">Del 3</span>
+    <h2>Komparativ fördel</h2>
+    <p>Nu har länderna vardera <b>40 timmar</b> arbetstid. De kan tillverka fisk eller verktyg. Den här gången är Nordland bättre på <b>båda</b> varorna.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Land</th><th>Fisk (timmar per enhet)</th><th>Verktyg (timmar per enhet)</th></tr></thead>
+      <tbody><tr><td>Nordland</td><td>2</td><td>4</td></tr><tr><td>Sydland</td><td>8</td><td>10</td></tr></tbody>
+    </table></div>
+    <ol class="qs"></ol>
+    <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="primary check">Rätta del 3</button> <span class="status"></span></div>
+    <p class="summary" hidden>Nordland har absolut fördel i båda varorna. Ändå har Sydland komparativ fördel i verktyg. När Sydland gör en enhet fisk avstår landet från 0,8 verktyg. För Nordland kostar en fisk bara 0,5 verktyg. Sydland är alltså minst dåligt på verktyg. I del 4 räknar du ut om det lönar sig att specialisera sig.</p>
+  </section>
+
+  <section class="card" data-part="4">
+    <span class="eyebrow">Del 4</span>
+    <h2>Lönar det sig?</h2>
+    <p>Samma tabell och samma 40 timmar som i del 3.</p>
+    <p class="task"><b>Först utan handel.</b> Båda länderna delar tiden lika: 20 timmar på fisk och 20 timmar på verktyg.</p>
+    <ol class="qs" data-from="0" data-to="2"></ol>
+    <p class="task"><b>Sedan med specialisering.</b> Sydland lägger alla 40 timmar på verktyg. Nordland vill att det ska bli lika många verktyg totalt som utan handel och tillverkar resten av verktygen själv. Den tid som blir över lägger Nordland på fisk.</p>
+    <ol class="qs" data-from="2" data-to="7" style="counter-reset: q 2"></ol>
+    <div class="row" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button class="primary check">Rätta del 4</button> <span class="status"></span></div>
+    <p class="summary" hidden>Det blir lika många verktyg som förut, 7 stycken, och 1,5 enheter mer fisk. Ingen har arbetat mer. Vinsten kommer av att varje land gör det som har lägst alternativkostnad. Det är kärnan i Ricardos teori. Om länderna sedan byter fisk mot verktyg till ett pris mellan 0,5 och 0,8 verktyg per fisk tjänar båda länderna på handeln.</p>
+  </section>
+
+  <section class="card">
+    <span class="eyebrow">Del 5</span>
+    <h2>Förklara med egna ord</h2>
+    <p>Sydland är sämre än Nordland på att tillverka både fisk och verktyg. Förklara varför det ändå lönar sig för båda länderna att specialisera sig och handla. Använd begreppen <b>absolut fördel</b>, <b>komparativ fördel</b> och <b>alternativkostnad</b>. Skriv tre till fem meningar.</p>
+    <textarea id="own" aria-label="Ditt svar"></textarea>
+    <button class="secondary" id="showModel">Visa ett exempel på ett bra svar</button>
+    <div class="summary" id="model" hidden>
+      <p>Nordland har absolut fördel i både fisk och verktyg, eftersom landet behöver färre timmar för båda varorna. Men alternativkostnaden skiljer sig åt. En fisk kostar Nordland 0,5 verktyg och Sydland 0,8 verktyg. Nordland har därför komparativ fördel i fisk och Sydland i verktyg. När varje land specialiserar sig på sin komparativa fördel blir den totala produktionen större, och genom handel kan båda länderna få del av vinsten.</p>
+    </div>
+    <p class="muted">Jämför med ditt eget svar. Har du med alla tre begreppen och förklarar du varför det lönar sig?</p>
+  </section>
+
+  <footer>Danderyds gymnasium · Samhällskunskap. Bygger på en räkneövning av Daniel Brändström. Inget du skriver här sparas eller skickas till läraren.</footer>
+</div>
+
+<script>
+// Frågorna per del. type num = sifferruta, choice = välj land. hint visas vid fel svar.
+const N = ["Nordland", "Sydland"];
+const PARTS = {
+  1: [
+    { q: "Nordland lägger 30 timmar på trä. Hur många enheter trä blir det?", a: 10, u: "enheter trä", hint: "Dela arbetstiden med tiden för en enhet: 30 / 3." },
+    { q: "Nordland lägger 30 timmar på tyg. Hur många enheter tyg blir det?", a: 5, u: "enheter tyg", hint: "30 / 6." },
+    { q: "Sydland lägger 30 timmar på trä. Hur många enheter trä blir det?", a: 6, u: "enheter trä", hint: "30 / 5." },
+    { q: "Sydland lägger 30 timmar på tyg. Hur många enheter tyg blir det?", a: 15, u: "enheter tyg", hint: "30 / 2." },
+    { q: "Hur mycket <b>trä</b> producerar länderna tillsammans utan handel?", a: 16, u: "enheter trä", hint: "Lägg ihop dina svar på fråga 1 och 3." },
+    { q: "Hur mycket <b>tyg</b> producerar länderna tillsammans utan handel?", a: 20, u: "enheter tyg", hint: "Lägg ihop dina svar på fråga 2 och 4." }
+  ],
+  2: [
+    { q: "Nordland lägger alla 60 timmar på trä. Hur mycket trä blir det?", a: 20, u: "enheter trä", hint: "60 / 3." },
+    { q: "Nordland lägger alla 60 timmar på tyg. Hur mycket tyg blir det?", a: 10, u: "enheter tyg", hint: "60 / 6." },
+    { q: "Sydland lägger alla 60 timmar på trä. Hur mycket trä blir det?", a: 12, u: "enheter trä", hint: "60 / 5." },
+    { q: "Sydland lägger alla 60 timmar på tyg. Hur mycket tyg blir det?", a: 30, u: "enheter tyg", hint: "60 / 2." },
+    { q: "Vilket land har <b>absolut fördel</b> i trä?", a: 0, type: "choice", hint: "Absolut fördel har det land som behöver minst tid per enhet. Jämför 3 och 5 timmar." },
+    { q: "Vilket land har <b>absolut fördel</b> i tyg?", a: 1, type: "choice", hint: "Jämför 6 och 2 timmar per enhet tyg." },
+    { q: "Varje land specialiserar sig på sin absoluta fördel. Hur mycket <b>trä</b> blir det totalt?", a: 20, u: "enheter trä", hint: "Bara Nordland gör trä. Titta på fråga 1." },
+    { q: "Hur mycket <b>tyg</b> blir det totalt?", a: 30, u: "enheter tyg", hint: "Bara Sydland gör tyg. Titta på fråga 4." }
+  ],
+  3: [
+    { q: "Nordland lägger alla 40 timmar på fisk. Hur mycket fisk blir det?", a: 20, u: "enheter fisk", hint: "40 / 2." },
+    { q: "Nordland lägger alla 40 timmar på verktyg. Hur många verktyg blir det?", a: 10, u: "verktyg", hint: "40 / 4." },
+    { q: "Sydland lägger alla 40 timmar på fisk. Hur mycket fisk blir det?", a: 5, u: "enheter fisk", hint: "40 / 8." },
+    { q: "Sydland lägger alla 40 timmar på verktyg. Hur många verktyg blir det?", a: 4, u: "verktyg", hint: "40 / 10." },
+    { q: "Vilket land har <b>absolut fördel</b> i fisk?", a: 0, type: "choice", hint: "Jämför 2 och 8 timmar per fisk." },
+    { q: "Vilket land har <b>absolut fördel</b> i verktyg?", a: 0, type: "choice", hint: "Jämför 4 och 10 timmar per verktyg." },
+    { q: "Alternativkostnad: hur många verktyg avstår Nordland från för att göra 1 fisk? Räkna timmar per fisk delat med timmar per verktyg.", a: 0.5, u: "verktyg", hint: "En fisk tar 2 timmar. På 2 timmar hade Nordland hunnit göra 2 / 4 verktyg." },
+    { q: "Samma uträkning för Sydland. Hur många verktyg kostar 1 fisk?", a: 0.8, u: "verktyg", hint: "8 / 10." },
+    { q: "Vilket land har lägst alternativkostnad för fisk, alltså <b>komparativ fördel</b> i fisk?", a: 0, type: "choice", hint: "Jämför dina svar på fråga 7 och 8. Det lägsta talet vinner." },
+    { q: "Vilket land har då <b>komparativ fördel</b> i verktyg, fast det är sämre på allt?", a: 1, type: "choice", hint: "Det land som inte har komparativ fördel i fisk har den i verktyg." },
+    { q: "Länderna specialiserar sig helt på sin komparativa fördel. Hur mycket fisk gör Nordland på 40 timmar?", a: 20, u: "enheter fisk", hint: "Samma som fråga 1." },
+    { q: "Hur många verktyg gör Sydland på 40 timmar?", a: 4, u: "verktyg", hint: "Samma som fråga 4." }
+  ],
+  4: [
+    { q: "Hur mycket <b>fisk</b> producerar länderna tillsammans utan handel?", a: 12.5, u: "enheter fisk", hint: "Nordland: 20 / 2 = 10. Sydland: 20 / 8 = 2,5. Lägg ihop." },
+    { q: "Hur många <b>verktyg</b> producerar länderna tillsammans utan handel?", a: 7, u: "verktyg", hint: "Nordland: 20 / 4 = 5. Sydland: 20 / 10 = 2. Lägg ihop." },
+    { q: "Hur många verktyg gör Sydland när landet lägger alla 40 timmar på verktyg?", a: 4, u: "verktyg", hint: "40 / 10." },
+    { q: "Hur många verktyg behöver Nordland göra för att det ska bli lika många som utan handel?", a: 3, u: "verktyg", hint: "Utan handel blev det 7 verktyg. Sydland gör redan 4." },
+    { q: "Hur många timmar tar det för Nordland att göra de verktygen?", a: 12, u: "timmar", hint: "Ett verktyg tar 4 timmar för Nordland. 3 × 4." },
+    { q: "Nordland lägger resten av tiden på fisk. Hur mycket fisk blir det?", a: 14, u: "enheter fisk", hint: "40 − 12 = 28 timmar kvar. En fisk tar 2 timmar." },
+    { q: "Hur mycket <b>mer fisk</b> blir det totalt jämfört med utan handel?", a: 1.5, u: "enheter fisk", hint: "Jämför ditt svar på fråga 6 med fråga 1: 14 − 12,5." }
+  ]
+};
+
+function parse(v) { return parseFloat(String(v).trim().replace(/\s/g, "").replace(",", ".")); }
+function fmt(x) { return String(x).replace(".", ","); }
+
+document.querySelectorAll("section[data-part]").forEach(sec => {
+  const part = sec.dataset.part, qs = PARTS[part];
+  sec.querySelectorAll("ol.qs").forEach(ol => {
+    const from = +(ol.dataset.from || 0), to = +(ol.dataset.to || qs.length);
+    qs.slice(from, to).forEach((item, i) => {
+      const idx = from + i, li = document.createElement("li");
+      li.dataset.i = idx;
+      let ans;
+      if (item.type === "choice") {
+        ans = N.map((n, k) => `<button type="button" class="choice" data-k="${k}">${n}</button>`).join("");
+      } else {
+        const id = `p${part}q${idx}`;
+        ans = `<input class="num" id="${id}" inputmode="decimal" autocomplete="off" aria-label="Svar fråga ${idx + 1}"><span class="unit">${item.u}</span>`;
+      }
+      li.innerHTML = `<p class="qline"><span>${item.q}</span></p><div class="ans">${ans}</div><p class="fb" aria-live="polite"></p>`;
+      ol.appendChild(li);
+    });
+  });
+  sec.addEventListener("click", e => {
+    const b = e.target.closest(".choice");
+    if (!b) return;
+    b.parentElement.querySelectorAll(".choice").forEach(x => x.classList.toggle("chosen", x === b));
+    b.closest("li").classList.remove("right", "wrong");
+    b.closest("li").querySelector(".fb").textContent = "";
+  });
+  sec.addEventListener("input", e => {
+    const li = e.target.closest("li");
+    if (li) { li.classList.remove("right", "wrong"); li.querySelector(".fb").textContent = ""; }
+  });
+  sec.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.matches("input.num")) sec.querySelector(".check").click();
+  });
+  sec.querySelector(".check").addEventListener("click", () => {
+    let right = 0, empty = 0;
+    sec.querySelectorAll("li[data-i]").forEach(li => {
+      const item = qs[li.dataset.i], fb = li.querySelector(".fb");
+      let given, ok;
+      if (item.type === "choice") {
+        const c = li.querySelector(".choice.chosen");
+        given = c ? +c.dataset.k : null; ok = given === item.a;
+      } else {
+        const raw = li.querySelector("input").value;
+        given = raw.trim() === "" ? null : parse(raw); ok = given !== null && Math.abs(given - item.a) < 0.001;
+      }
+      li.classList.remove("right", "wrong");
+      if (given === null) { empty++; fb.textContent = ""; return; }
+      if (ok) { right++; li.classList.add("right"); fb.textContent = "Rätt."; }
+      else { li.classList.add("wrong"); fb.innerHTML = `<b>Inte rätt än.</b> Ledtråd: ${item.hint}`; }
+    });
+    const total = qs.length, st = sec.querySelector(".status");
+    if (right === total) st.textContent = `Alla ${total} rätt.`;
+    else if (empty) st.textContent = `${right} av ${total} rätt. ${empty} frågor saknar svar.`;
+    else st.textContent = `${right} av ${total} rätt. Läs ledtrådarna och försök igen.`;
+    sec.querySelector(".summary").hidden = right !== total;
+  });
+});
+document.getElementById("showModel").addEventListener("click", e => {
+  const m = document.getElementById("model");
+  m.hidden = !m.hidden;
+  e.target.textContent = m.hidden ? "Visa ett exempel på ett bra svar" : "Dölj exemplet";
+});
+</script>
+</body>
+</html>
