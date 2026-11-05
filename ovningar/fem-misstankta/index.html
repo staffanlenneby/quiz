@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fem misstänkta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate:#2D3E50; --slate2:#22303f; --sand:#F5F0E6; --gold:#C9952A; --goldbg:#F7EDD6;
+  --red:#8B1A1A; --green:#2D6A4F; --navy:#1C3557; --turk:#2EC4B6; --ink:#1d2733;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--slate);color:var(--sand);font-family:Lato,"Segoe UI",Arial,sans-serif;font-size:18px;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:3px solid var(--gold);padding-bottom:10px;margin-bottom:20px}
+header.top .brand{font-weight:900;letter-spacing:.04em;font-size:22px}
+header.top .brand span{color:var(--gold)}
+header.top .meta{font-size:14px;opacity:.85;text-align:right}
+.steps{display:flex;gap:6px;margin:0 0 18px}
+.steps i{flex:1;height:8px;border-radius:4px;background:#45576b}
+.steps i.done{background:var(--gold)}
+.steps i.now{background:var(--turk)}
+h1{font-size:40px;margin:0 0 6px;font-weight:900}
+h2{font-size:28px;margin:0 0 4px;font-weight:900}
+.kicker{color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+.story{background:var(--slate2);border-left:6px solid var(--gold);padding:14px 16px;margin:14px 0;border-radius:6px;font-size:19px}
+.task{background:var(--sand);color:var(--ink);padding:16px 18px;border-radius:8px;margin:14px 0}
+.task b{color:var(--navy)}
+.task ol{margin:6px 0 0;padding-left:22px}
+.timer{background:#000;border-radius:10px;padding:14px 16px 16px;margin:16px 0;text-align:center}
+.timer .digits{font-size:72px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:.04em;line-height:1}
+.timer .bar{height:12px;background:#222;border-radius:6px;margin-top:12px;overflow:hidden}
+.timer .bar div{height:100%;background:var(--turk);width:100%;transition:width .9s linear}
+.timer.over .digits{color:#ff6b6b}
+.timer.over .bar div{background:#ff6b6b}
+.timer .note{color:#ffb3b3;font-size:16px;margin-top:8px;min-height:1em}
+.codebox{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.codebox input{flex:1 1 220px;font:inherit;font-size:28px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:12px 14px;border-radius:8px;border:3px solid var(--gold);background:#fff;color:var(--ink);min-width:0}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:12px 20px;cursor:pointer}
+.btn-gold{background:var(--gold);color:#1a1a1a;font-size:20px}
+.btn-gold:disabled{background:#7b6a45;color:#333;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--sand);border:2px solid #7d8da0;font-size:16px}
+.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+.msg{min-height:1.5em;font-weight:700;font-size:18px;margin:6px 0}
+.msg.bad{color:#ffb3b3}.msg.ok{color:#9fe3b8}
+.hint{background:var(--goldbg);color:var(--ink);border-radius:8px;padding:12px 14px;margin:10px 0;display:none}
+.hint.show{display:block}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:14px;opacity:.8}
+.big-ok{font-size:44px;font-weight:900;color:var(--gold);margin:8px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:16px 0}
+.stats div{background:var(--slate2);border-radius:8px;padding:12px;text-align:center}
+.stats b{display:block;font-size:30px;color:var(--gold)}
+.hidden{display:none!important}
+.facit{background:var(--sand);color:var(--ink);border-radius:8px;padding:16px 18px;margin:14px 0}
+.facit h3{margin:14px 0 4px;color:var(--navy)}
+.facit h3:first-child{margin-top:0}
+.facit ul{margin:4px 0;padding-left:22px}
+.teacherlink{margin-top:28px;text-align:right}
+.teacherlink button{background:none;color:#8fa0b3;font-size:13px;padding:4px;text-decoration:underline}
+@media (max-width:560px){h1{font-size:30px}.timer .digits{font-size:56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">FEM <span>MISSTÄNKTA</span></div>
+    <div class="meta" id="metaGroup">Samhällskunskap 3 · Kriminologiska teorier</div>
+  </header>
+
+  <!-- START -->
+  <section id="vStart">
+    <div class="kicker">Repetition inför provet</div>
+    <h1>Fem misstänkta</h1>
+    <div class="story">Fem teorier är misstänkta. Alla påstår att just de kan förklara varför människor begår brott. Ni ska ta reda på vem som säger vad, vad de menar och vilken som förklarar vilket fall.</div>
+    <div class="task">
+      <b>Så fungerar det</b>
+      <ol>
+        <li>Det finns fem nivåer och ett kuvert till varje nivå. Öppna bara det kuvert som sidan säger.</li>
+        <li>Varje nivå ger en kod. Skriv in den och tryck på Lås upp.</li>
+        <li>Fel kod låser sidan i 30 sekunder.</li>
+        <li>En ledtråd kostar en minut på nästa nivå.</li>
+        <li>Mobilerna ligger i lådan. Ni behöver bara papperen och varandra.</li>
+      </ol>
+    </div>
+    <label for="groupName" class="small">Gruppens namn</label>
+    <div class="codebox"><input id="groupName" maxlength="24" placeholder="T.ex. Grupp 3" style="letter-spacing:.02em;text-transform:none"><button class="btn-gold" id="startBtn">Starta</button></div>
+    <div class="msg bad" id="startMsg"></div>
+  </section>
+
+  <!-- NIVÅ -->
+  <section id="vLevel" class="hidden">
+    <div class="steps" id="steps"></div>
+    <div class="kicker" id="lvKicker"></div>
+    <h2 id="lvTitle"></h2>
+    <div class="story" id="lvStory"></div>
+    <div class="task" id="lvTask"></div>
+    <div class="timer" id="timer"><div class="digits" id="digits">00:00</div><div class="bar"><div id="barFill"></div></div><div class="note" id="timerNote"></div></div>
+    <div id="codeArea">
+      <div class="codebox"><input id="codeInput" autocomplete="off" spellcheck="false" placeholder="Koden"><button class="btn-gold" id="unlockBtn">Lås upp</button></div>
+      <div class="msg" id="codeMsg"></div>
+    </div>
+    <div class="row">
+      <button class="btn-ghost" id="hintBtn">Köp ledtråd (−1 minut på nästa nivå)</button>
+    </div>
+    <div class="hint" id="hintBox"></div>
+  </section>
+
+  <!-- MELLANSKÄRM -->
+  <section id="vBetween" class="hidden">
+    <div class="steps" id="steps2"></div>
+    <div class="big-ok">Rätt!</div>
+    <div class="story" id="betweenText"></div>
+    <button class="btn-gold" id="nextBtn">Vi har öppnat kuvertet. Starta tiden</button>
+  </section>
+
+  <!-- SLUT -->
+  <section id="vEnd" class="hidden">
+    <div class="kicker">Fallet är löst</div>
+    <h1>Domen är avkunnad</h1>
+    <div class="story">Ni har gått igenom alla fem misstänkta. Lägg tillbaka papperen i kuverten och vänd er mot tavlan.</div>
+    <div class="stats">
+      <div><b id="stTime">–</b>total tid</div>
+      <div><b id="stHints">–</b>ledtrådar</div>
+      <div><b id="stWrong">–</b>felaktiga koder</div>
+    </div>
+    <p class="small" id="stGroup"></p>
+  </section>
+
+  <!-- LÄRARLÄGE -->
+  <section id="vTeacher" class="hidden">
+    <div class="kicker">Lärarläge</div>
+    <h2>Facit</h2>
+    <div class="facit" id="facitBox"></div>
+    <div class="row"><button class="btn-ghost" id="resetBtn">Nollställ den här datorn</button><button class="btn-gold" id="closeTeacher">Stäng facit</button></div>
+  </section>
+
+  <div class="teacherlink"><button id="teacherBtn">Lärare</button></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var H = {"levels":["1eyb7grqc21","64u66zgliz","1yd5k0sjug5","s8gevyxq9x","4m5kc1kol5"],"teacher":"knc6f4vkyn"};
+var FACIT = "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";
+
+var LEVELS = [
+ { title:"Vem sa vad?", sec:360,
+   story:"De misstänkta har gripits, men det är oklart vilken forskare som har sagt vad. Det måste ni reda ut först. Åtta forskare, åtta idéer.",
+   task:"<b>Öppna kuvert 1.</b><ol><li>Lägg forskarkorten i en rad.</li><li>Para ihop varje forskare med rätt idékort.</li><li>Varje idékort har ett nummer i hörnet.</li></ol><b>Koden:</b> summan av numren på idékorten som hör till <b>Merton</b>, <b>Hirschi</b> och <b>Becker</b>.",
+   hint:"Merton och Agnew hör båda till strainteorin. Merton skriver om mål och medel. Agnew skriver om press, ilska och frustration. Becker är den som skriver om stämpling." },
+ { title:"Begreppslåset", sec:300,
+   story:"Ett vittne har lämnat nio uppgifter om personer i området. Förhören kan inte fortsätta förrän uppgifterna är sorterade.",
+   task:"<b>Öppna kuvert 2.</b><ol><li>Lägg rutnätet på bänken.</li><li>Läs påståendekorten högt för varandra.</li><li>Lägg varje kort på den ruta där det hör hemma. Ett kort per ruta.</li></ol><b>Koden:</b> bokstäverna på korten som ligger på ruta <b>2</b>, <b>4</b> och <b>7</b>, i den ordningen.",
+   hint:"Börja med Hirschis fyra band. Vem har någon att göra besviken? Vem har något att förlora? Vem har inte tid? Vem tror på reglerna? De fem kort som blir kvar hör till Merton." },
+ { title:"Förväxlingarna", sec:240,
+   story:"Försvaret påstår att polisen har blandat ihop de misstänkta. Visa att försvaret har fel.",
+   task:"<b>Öppna kuvert 3.</b><ol><li>Läs ett påstående i taget.</li><li>Ringa in den teori som påståendet hör till. Bara en per rad.</li><li>Varje teori har en siffra bredvid sig.</li></ol><b>Koden:</b> siffrorna ni har ringat in, uppifrån och ner.",
+   hint:"Fråga er två saker. Förklarar påståendet varför någon begår brott, eller varför de flesta låter bli? Lär man sig brottet av andra, eller vänder gruppen på samhällets normer?" },
+ { title:"Tre fall", sec:240,
+   story:"Tre nya fall har kommit in samtidigt. Åklagaren vill veta vilken misstänkt som hör till vilket fall.",
+   task:"<b>Öppna kuvert 4.</b><ol><li>Läs fall A, B och C.</li><li>Leta efter detaljerna i texten som pekar mot en teori.</li><li>Välj den teori på listan som förklarar fallet bäst.</li></ol><b>Koden:</b> teorins nummer för fall A, B och C, i den ordningen.",
+   hint:"Ett av fallen handlar om en plats och inte om en person. Ett annat handlar om vad som händer efter att någon har åkt fast första gången." },
+ { title:"Åklagarens fråga", sec:240, teacher:true,
+   story:"Åklagaren vill ha en förklaring innan rättegången. Den här gången räcker det inte med en kod. Ni måste kunna förklara.",
+   task:"<b>Öppna kuvert 5.</b><ol><li>Läs fallet om Rami.</li><li>Förbered svar på de tre frågorna. Alla i gruppen ska kunna svara.</li><li>Räck upp handen när ni är klara. Läraren väljer vem som svarar.</li></ol><b>Koden:</b> läraren skriver in den när ni har förklarat.",
+   hint:"Ett tips: Rami ville ha det som andra har, och han lärde sig av de äldre killarna. Tänk också på hans bror, som bor i samma område men inte begår brott." }
+];
+var BETWEEN = [
+ "Ni vet nu vilka forskarna är. Nästa steg är att förstå vad de menar.",
+ "Uppgifterna är sorterade. Försvaret har redan hittat ett nytt sätt att krångla till det.",
+ "Försvaret hade fel. Nu kommer det in nya fall, och tiden blir kortare.",
+ "Tre fall är lösta. Nu återstår åklagarens fråga."
+];
+
+// ---------- hjälpare ----------
+function norm(s){ return (s||"").toUpperCase().replace(/[\s\-\.]/g,""); }
+function cyrb53(str, seed){ seed = seed||0;
+  var h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+  for (var i=0, ch; i<str.length; i++){ ch=str.charCodeAt(i); h1=Math.imul(h1^ch,2654435761); h2=Math.imul(h2^ch,1597334677); }
+  h1 = Math.imul(h1^(h1>>>16),2246822507); h1 ^= Math.imul(h2^(h2>>>13),3266489909);
+  h2 = Math.imul(h2^(h2>>>16),2246822507); h2 ^= Math.imul(h1^(h1>>>13),3266489909);
+  return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
+}
+function hash(s){ return cyrb53("fm|"+norm(s), 46); }
+function decrypt(b64, key){
+  try{
+    var bin = atob(b64), bytes = new Uint8Array(bin.length);
+    var k = new TextEncoder().encode(norm(key));
+    for (var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i) ^ k[i % k.length];
+    return new TextDecoder().decode(bytes);
+  }catch(e){ return null; }
+}
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s=Math.max(0,Math.floor(s)); var m=Math.floor(s/60), r=s%60; return (m<10?"0":"")+m+":"+(r<10?"0":"")+r; }
+function show(id){ ["vStart","vLevel","vBetween","vEnd","vTeacher"].forEach(function(v){ $(v).classList.toggle("hidden", v!==id); }); }
+
+// ---------- ljud ----------
+var actx=null;
+function beep(){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.32].forEach(function(t){
+      var o=actx.createOscillator(), g=actx.createGain();
+      o.frequency.value=880; o.type="sine"; o.connect(g); g.connect(actx.destination);
+      var t0=actx.currentTime+t; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(0.35,t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+0.2); o.start(t0); o.stop(t0+0.22);
+    });
+  }catch(e){}
+}
+
+// ---------- tillstånd ----------
+var KEY="femMisstankta_v1";
+var S = load() || fresh();
+function fresh(){ return {group:"", level:-1, phase:"start", start:0, levelStart:0, levelSec:0, penaltyNext:0, hints:0, wrong:0, hintBought:false, lockUntil:0, beeped:false, endTime:0}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ var x=localStorage.getItem(KEY); return x?JSON.parse(x):null; }catch(e){ return null; } }
+
+function drawSteps(el){
+  el.innerHTML="";
+  for (var i=0;i<LEVELS.length;i++){
+    var d=document.createElement("i");
+    if (i<S.level || (S.phase==="between" && i===S.level)) d.className="done";
+    else if (i===S.level) d.className="now";
+    el.appendChild(d);
+  }
+}
+
+function render(){
+  $("metaGroup").textContent = S.group ? (S.group+" · Samhällskunskap 3") : "Samhällskunskap 3 · Kriminologiska teorier";
+  if (S.phase==="start"){ show("vStart"); return; }
+  if (S.phase==="end"){
+    show("vEnd");
+    $("stTime").textContent = fmt((S.endTime-S.start)/1000);
+    $("stHints").textContent = S.hints; $("stWrong").textContent = S.wrong;
+    $("stGroup").textContent = S.group; return;
+  }
+  if (S.phase==="between"){
+    show("vBetween"); drawSteps($("steps2"));
+    $("betweenText").textContent = BETWEEN[S.level] + " Öppna kuvert " + (S.level+2) + ".";
+    return;
+  }
+  var L = LEVELS[S.level];
+  show("vLevel"); drawSteps($("steps"));
+  $("lvKicker").textContent = "Nivå " + (S.level+1) + " av " + LEVELS.length;
+  $("lvTitle").textContent = L.title;
+  $("lvStory").textContent = L.story;
+  $("lvTask").innerHTML = L.task;
+  $("hintBox").textContent = "Ledtråd: " + L.hint;
+  $("hintBox").classList.toggle("show", !!S.hintBought);
+  $("hintBtn").disabled = !!S.hintBought;
+  $("hintBtn").textContent = S.level===LEVELS.length-1 ? "Köp ledtråd" : "Köp ledtråd (−1 minut på nästa nivå)";
+  $("codeInput").placeholder = L.teacher ? "Lärarens kod" : "Koden";
+  $("codeInput").type = L.teacher ? "password" : "text";
+  $("codeMsg").textContent=""; $("codeMsg").className="msg";
+  tick();
+}
+
+function tick(){
+  if (S.phase!=="level") return;
+  var now = Date.now();
+  var left = S.levelSec - (now - S.levelStart)/1000;
+  var t = $("timer");
+  if (left >= 0){
+    t.classList.remove("over");
+    $("digits").textContent = fmt(Math.ceil(left));
+    $("barFill").style.width = (100*left/S.levelSec)+"%";
+    $("timerNote").textContent = "";
+  } else {
+    if (!S.beeped){ S.beeped=true; save(); beep(); }
+    t.classList.add("over");
+    $("digits").textContent = "+" + fmt(-left);
+    $("barFill").style.width = "100%";
+    $("timerNote").textContent = "Tiden är slut. Ni får fortsätta, men nästa grupp kan gå förbi er.";
+  }
+  // spärr
+  var lock = S.lockUntil - now;
+  var btn = $("unlockBtn");
+  if (lock > 0){
+    btn.disabled = true; $("codeInput").disabled = true;
+    $("codeMsg").className="msg bad";
+    $("codeMsg").textContent = "Fel kod. Sidan är låst i " + Math.ceil(lock/1000) + " sekunder. Kontrollera ert material under tiden.";
+  } else if (btn.disabled){
+    btn.disabled = false; $("codeInput").disabled = false;
+    $("codeMsg").textContent = ""; $("codeMsg").className="msg";
+  }
+}
+setInterval(tick, 500);
+
+function startLevel(i){
+  S.level=i; S.phase="level"; S.levelStart=Date.now();
+  S.levelSec = Math.max(60, LEVELS[i].sec - S.penaltyNext);
+  S.penaltyNext=0; S.hintBought=false; S.beeped=false; S.lockUntil=0;
+  save(); render();
+}
+
+$("startBtn").onclick = function(){
+  var g = $("groupName").value.trim();
+  if (!g){ $("startMsg").textContent = "Skriv gruppens namn först."; return; }
+  S = fresh(); S.group=g; S.start=Date.now(); save(); startLevel(0);
+};
+$("nextBtn").onclick = function(){ startLevel(S.level+1); };
+
+function tryCode(){
+  if (S.phase!=="level" || Date.now() < S.lockUntil) return;
+  var v = $("codeInput").value; if (!norm(v)) return;
+  var hv = hash(v);
+  var ok = (hv === H.levels[S.level]) || (hv === H.teacher);
+  $("codeInput").value = "";
+  if (ok){
+    if (S.level === LEVELS.length-1){ S.phase="end"; S.endTime=Date.now(); save(); render(); return; }
+    S.phase="between"; save(); render();
+  } else {
+    S.wrong++; S.lockUntil = Date.now()+30000; save(); tick();
+  }
+}
+$("unlockBtn").onclick = tryCode;
+$("codeInput").addEventListener("keydown", function(e){ if (e.key==="Enter") tryCode(); });
+
+$("hintBtn").onclick = function(){
+  if (S.hintBought) return;
+  S.hintBought=true; S.hints++; if (S.level < LEVELS.length-1) S.penaltyNext=60;
+  save(); render();
+};
+
+// ---------- lärarläge ----------
+var prevView = null;
+$("teacherBtn").onclick = function(){
+  var k = prompt("Lärarkod");
+  if (!k) return;
+  if (hash(k) !== H.teacher){ alert("Fel kod."); return; }
+  var html = decrypt(FACIT, k);
+  if (!html){ alert("Facit kunde inte visas."); return; }
+  $("facitBox").innerHTML = html;
+  show("vTeacher");
+};
+$("closeTeacher").onclick = function(){ render(); };
+$("resetBtn").onclick = function(){
+  if (!confirm("Nollställa den här datorn? Gruppens framsteg försvinner.")) return;
+  S = fresh(); save(); $("groupName").value=""; render();
+};
+
+render();
+})();
+</script>
+</body>
+</html>
