@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krisen i Lindmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate:#2D3E50; --slate2:#22303f; --sand:#F5F0E6; --gold:#C9952A; --goldbg:#F7EDD6;
+  --red:#8B1A1A; --green:#2D6A4F; --navy:#1C3557; --turk:#2EC4B6; --ink:#1d2733;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--slate);color:var(--sand);font-family:Lato,"Segoe UI",Arial,sans-serif;font-size:18px;line-height:1.45}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 48px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:3px solid var(--gold);padding-bottom:10px;margin-bottom:20px}
+header.top .brand{font-weight:900;letter-spacing:.04em;font-size:22px}
+header.top .brand span{color:var(--gold)}
+header.top .meta{font-size:14px;opacity:.85;text-align:right}
+.steps{display:flex;gap:6px;margin:0 0 18px}
+.steps i{flex:1;height:8px;border-radius:4px;background:#45576b}
+.steps i.done{background:var(--gold)}
+.steps i.now{background:var(--turk)}
+h1{font-size:40px;margin:0 0 6px;font-weight:900}
+h2{font-size:28px;margin:0 0 4px;font-weight:900}
+.kicker{color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+.story{background:var(--slate2);border-left:6px solid var(--gold);padding:14px 16px;margin:14px 0;border-radius:6px;font-size:19px}
+.task{background:var(--sand);color:var(--ink);padding:16px 18px;border-radius:8px;margin:14px 0}
+.task b{color:var(--navy)}
+.task ol{margin:6px 0 0;padding-left:22px}
+.timer{background:#000;border-radius:10px;padding:14px 16px 16px;margin:16px 0;text-align:center}
+.timer .digits{font-size:72px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:.04em;line-height:1}
+.timer .bar{height:12px;background:#222;border-radius:6px;margin-top:12px;overflow:hidden}
+.timer .bar div{height:100%;background:var(--turk);width:100%;transition:width .9s linear}
+.timer.over .digits{color:#ff6b6b}
+.timer.over .bar div{background:#ff6b6b}
+.meter{display:flex;justify-content:space-between;align-items:center;background:var(--slate2);border-radius:8px;padding:10px 14px;margin:0 0 14px;font-weight:700}.meter b{font-size:30px;color:#9fe3b8;font-variant-numeric:tabular-nums}.meter.warn b{color:#ffd27a}.meter.bad b{color:#ff8a8a}
+.timer .note{color:#ffb3b3;font-size:16px;margin-top:8px;min-height:1em}
+.codebox{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.codebox input{flex:1 1 220px;font:inherit;font-size:28px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:12px 14px;border-radius:8px;border:3px solid var(--gold);background:#fff;color:var(--ink);min-width:0}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:12px 20px;cursor:pointer}
+.btn-gold{background:var(--gold);color:#1a1a1a;font-size:20px}
+.btn-gold:disabled{background:#7b6a45;color:#333;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--sand);border:2px solid #7d8da0;font-size:16px}
+.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+.msg{min-height:1.5em;font-weight:700;font-size:18px;margin:6px 0}
+.msg.bad{color:#ffb3b3}.msg.ok{color:#9fe3b8}
+.hint{background:var(--goldbg);color:var(--ink);border-radius:8px;padding:12px 14px;margin:10px 0;display:none}
+.hint.show{display:block}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:14px;opacity:.8}
+.big-ok{font-size:44px;font-weight:900;color:var(--gold);margin:8px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:16px 0}
+.stats div{background:var(--slate2);border-radius:8px;padding:12px;text-align:center}
+.stats b{display:block;font-size:30px;color:var(--gold)}
+.hidden{display:none!important}
+.facit{background:var(--sand);color:var(--ink);border-radius:8px;padding:16px 18px;margin:14px 0}
+.facit h3{margin:14px 0 4px;color:var(--navy)}
+.facit h3:first-child{margin-top:0}
+.facit ul{margin:4px 0;padding-left:22px}
+.teacherlink{margin-top:28px;text-align:right}
+.teacherlink button{background:none;color:#8fa0b3;font-size:13px;padding:4px;text-decoration:underline}
+@media (max-width:560px){h1{font-size:30px}.timer .digits{font-size:56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">KRISEN I <span>LINDMARK</span></div>
+    <div class="meta" id="metaGroup">Samhällskunskap 2 · Ekonomiska teorier</div>
+  </header>
+
+  <!-- START -->
+  <section id="vStart">
+    <div class="kicker">Repetition inför provet</div>
+    <h1>Krisen i Lindmark</h1>
+    <div class="story">Det påhittade landet Lindmark har hamnat i en lågkonjunktur. Fem ekonomiska teorier ger regeringen råd. Ni ska reda ut vem som säger vad, vad teorierna menar och vilken teori som ligger bakom regeringens beslut. Ju längre tid det tar, desto högre blir arbetslösheten.</div>
+    <div class="task">
+      <b>Så fungerar det</b>
+      <ol>
+        <li>Det finns fem nivåer och ett kuvert till varje nivå. Öppna bara det kuvert som sidan säger.</li>
+        <li>Varje nivå ger en kod. Skriv in den och tryck på Lås upp.</li>
+        <li>Fel kod låser sidan i 30 sekunder.</li>
+        <li>En ledtråd kostar en minut på nästa nivå.</li><li>Arbetslösheten stiger för varje fel kod och varje minut på övertid. Klarar ni en nivå i tid sjunker den.</li>
+        <li>Mobilerna ligger i lådan. Ni behöver bara papperen och varandra.</li>
+      </ol>
+    </div>
+    <label for="groupName" class="small">Gruppens namn</label>
+    <div class="codebox"><input id="groupName" maxlength="24" placeholder="T.ex. Grupp 3" style="letter-spacing:.02em;text-transform:none"><button class="btn-gold" id="startBtn">Starta</button></div>
+    <div class="msg bad" id="startMsg"></div>
+  </section>
+
+  <!-- NIVÅ -->
+  <section id="vLevel" class="hidden">
+    <div class="steps" id="steps"></div><div class="meter" id="meter"><span>Arbetslöshet i Lindmark</span><b id="unemp">7,0 %</b></div>
+    <div class="kicker" id="lvKicker"></div>
+    <h2 id="lvTitle"></h2>
+    <div class="story" id="lvStory"></div>
+    <div class="task" id="lvTask"></div>
+    <div class="timer" id="timer"><div class="digits" id="digits">00:00</div><div class="bar"><div id="barFill"></div></div><div class="note" id="timerNote"></div></div>
+    <div id="codeArea">
+      <div class="codebox"><input id="codeInput" autocomplete="off" spellcheck="false" placeholder="Koden"><button class="btn-gold" id="unlockBtn">Lås upp</button></div>
+      <div class="msg" id="codeMsg"></div>
+    </div>
+    <div class="row">
+      <button class="btn-ghost" id="hintBtn">Köp ledtråd (−1 minut på nästa nivå)</button>
+    </div>
+    <div class="hint" id="hintBox"></div>
+  </section>
+
+  <!-- MELLANSKÄRM -->
+  <section id="vBetween" class="hidden">
+    <div class="steps" id="steps2"></div>
+    <div class="big-ok">Rätt!</div>
+    <div class="story" id="betweenText"></div>
+    <button class="btn-gold" id="nextBtn">Vi har öppnat kuvertet. Starta tiden</button>
+  </section>
+
+  <!-- SLUT -->
+  <section id="vEnd" class="hidden">
+    <div class="kicker">Fallet är löst</div>
+    <h1>Krisen är över</h1>
+    <div class="story">Ni har gått igenom alla fem teorier. Lägg tillbaka papperen i kuverten och vänd er mot tavlan.</div>
+    <div class="stats">
+      <div><b id="stUnemp">–</b>arbetslöshet</div><div><b id="stTime">–</b>total tid</div>
+      <div><b id="stHints">–</b>ledtrådar</div>
+      <div><b id="stWrong">–</b>felaktiga koder</div>
+    </div>
+    <p class="small" id="stGroup"></p>
+  </section>
+
+  <!-- LÄRARLÄGE -->
+  <section id="vTeacher" class="hidden">
+    <div class="kicker">Lärarläge</div>
+    <h2>Facit</h2>
+    <div class="facit" id="facitBox"></div>
+    <div class="row"><button class="btn-ghost" id="resetBtn">Nollställ den här datorn</button><button class="btn-gold" id="closeTeacher">Stäng facit</button></div>
+  </section>
+
+  <div class="teacherlink"><button id="teacherBtn">Lärare</button></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var H = {"levels":["ot4imhk0ky","18pvcxl1ocg","1qwymm2lwub","1nn1ynx2o3l","b48bz7qe7d"],"teacher":"be0qxujdoo"};
+var FACIT = "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";
+
+var LEVELS = [
+ { title:"Vem sa vad?", sec:360,
+   story:"Lindmark har gått in i en lågkonjunktur. Regeringen har kallat in fem ekonomiska teorier för att få råd, men det är oklart vilken tänkare som har sagt vad.",
+   task:"<b>Öppna kuvert 1.</b><ol><li>Lägg tänkarkorten i en rad.</li><li>Para ihop varje tänkare med rätt idékort.</li><li>Varje idékort har ett nummer i hörnet.</li></ol><b>Koden:</b> summan av numren på idékorten som hör till <b>Smith</b>, <b>Keynes</b> och <b>Friedman</b>.",
+   hint:"Smith och Ricardo hör båda till den klassiska ekonomin. Smith skriver om den osynliga handen. Ricardo skriver om handel mellan länder. Friedman är monetarist och skriver om penningmängden." },
+ { title:"Begreppslåset", sec:300,
+   story:"Rådgivarna använder olika begrepp och regeringen förstår inte vem som menar vad. Begreppen måste sorteras.",
+   task:"<b>Öppna kuvert 2.</b><ol><li>Lägg rutnätet på bänken.</li><li>Läs begreppskorten högt för varandra.</li><li>Lägg varje kort på rätt teori. Det ska ligga två kort på varje ruta.</li></ol><b>Koden:</b> summan av siffrorna på korten i ruta <b>3</b>, följd av summan i ruta <b>5</b>. Om ruta 3 ger 11 och ruta 5 ger 4 blir koden 114.",
+   hint:"Börja med de begrepp ni är säkra på: osynliga handen, mervärde och penningmängd. Merkantilismen och den klassiska ekonomin har motsatta syn på tullar och frihandel." },
+ { title:"Förväxlingarna", sec:240,
+   story:"Oppositionen påstår att regeringen blandar ihop teorierna. Visa att oppositionen har fel.",
+   task:"<b>Öppna kuvert 3.</b><ol><li>Läs ett påstående i taget.</li><li>Ringa in den teori som påståendet hör till. Bara en per rad.</li><li>Varje teori har en siffra bredvid sig.</li></ol><b>Koden:</b> siffrorna ni har ringat in, uppifrån och ner.",
+   hint:"Både Keynes och Friedman vill hantera kriser, men på olika sätt. Keynes vill att staten ökar utgifterna. Friedman vill att centralbanken håller penningmängden stabil." },
+ { title:"Tre beslut", sec:240,
+   story:"Regeringen i Lindmark har fattat tre beslut på en vecka. Journalisterna vill veta vilken teori som ligger bakom vart och ett.",
+   task:"<b>Öppna kuvert 4.</b><ol><li>Läs beslut A, B och C.</li><li>Leta efter detaljerna i texten som pekar mot en teori.</li><li>Välj den teori på listan som passar beslutet bäst.</li></ol><b>Koden:</b> teorins nummer för beslut A, B och C, i den ordningen.",
+   hint:"Ett av besluten handlar om att låna i en lågkonjunktur. Ett annat handlar om inflationen. Det tredje handlar om att landet ska sälja mer än det köper." },
+ { title:"Finansministerns fråga", sec:240, teacher:true,
+   story:"Krisen i Lindmark är på väg att lösas. Nu vill finansministern veta hur Sverige gör. Den här gången räcker det inte med en kod. Ni måste kunna förklara.",
+   task:"<b>Öppna kuvert 5.</b><ol><li>Läs om svensk ekonomisk politik i dag.</li><li>Förbered svar på de tre frågorna. Alla i gruppen ska kunna svara.</li><li>Räck upp handen när ni är klara. Läraren väljer vem som svarar.</li></ol><b>Koden:</b> läraren skriver in den när ni har förklarat.",
+   hint:"Ett tips: titta på vem som ansvarar för inflationen och vad som händer med statens utgifter när arbetslösheten stiger." }
+];
+var BETWEEN = [
+ "Ni vet nu vilka tänkarna är. Nästa steg är att förstå deras begrepp.",
+ "Begreppen är sorterade. Oppositionen har redan hittat något att anmärka på.",
+ "Oppositionen hade fel. Nu har regeringen fattat tre nya beslut, och tiden blir kortare.",
+ "Tre beslut är förklarade. Nu återstår finansministerns fråga."
+];
+
+// ---------- hjälpare ----------
+function norm(s){ return (s||"").toUpperCase().replace(/[\s\-\.]/g,""); }
+function cyrb53(str, seed){ seed = seed||0;
+  var h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+  for (var i=0, ch; i<str.length; i++){ ch=str.charCodeAt(i); h1=Math.imul(h1^ch,2654435761); h2=Math.imul(h2^ch,1597334677); }
+  h1 = Math.imul(h1^(h1>>>16),2246822507); h1 ^= Math.imul(h2^(h2>>>13),3266489909);
+  h2 = Math.imul(h2^(h2>>>16),2246822507); h2 ^= Math.imul(h1^(h1>>>13),3266489909);
+  return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
+}
+function hash(s){ return cyrb53("fm|"+norm(s), 46); }
+function decrypt(b64, key){
+  try{
+    var bin = atob(b64), bytes = new Uint8Array(bin.length);
+    var k = new TextEncoder().encode(norm(key));
+    for (var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i) ^ k[i % k.length];
+    return new TextDecoder().decode(bytes);
+  }catch(e){ return null; }
+}
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s=Math.max(0,Math.floor(s)); var m=Math.floor(s/60), r=s%60; return (m<10?"0":"")+m+":"+(r<10?"0":"")+r; }
+function show(id){ ["vStart","vLevel","vBetween","vEnd","vTeacher"].forEach(function(v){ $(v).classList.toggle("hidden", v!==id); }); }
+
+// ---------- ljud ----------
+var actx=null;
+function beep(){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.32].forEach(function(t){
+      var o=actx.createOscillator(), g=actx.createGain();
+      o.frequency.value=880; o.type="sine"; o.connect(g); g.connect(actx.destination);
+      var t0=actx.currentTime+t; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(0.35,t0+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+0.2); o.start(t0); o.stop(t0+0.22);
+    });
+  }catch(e){}
+}
+
+// ---------- tillstånd ----------
+var KEY="krisenLindmark_v1";
+var S = load() || fresh();
+function fresh(){ return {group:"", level:-1, phase:"start", start:0, levelStart:0, levelSec:0, penaltyNext:0, hints:0, wrong:0, effect:0, hintBought:false, lockUntil:0, beeped:false, endTime:0}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ var x=localStorage.getItem(KEY); return x?JSON.parse(x):null; }catch(e){ return null; } }
+
+function overMin(){ var o=(Date.now()-S.levelStart)/1000 - S.levelSec; return o>0 ? Math.ceil(o/60) : 0; }
+function unemp(){ var u = 7 + (S.effect||0) + 0.2*S.wrong; if (S.phase==="level") u += 0.5*overMin(); return Math.max(3, u); }
+function fmtU(u){ return u.toFixed(1).replace(".", ",")+" %"; }
+function drawMeter(){ var u=unemp(), m=$("meter"); $("unemp").textContent=fmtU(u); m.className="meter"+(u>=9?" bad":(u>=7.5?" warn":"")); }
+function drawSteps(el){
+  el.innerHTML="";
+  for (var i=0;i<LEVELS.length;i++){
+    var d=document.createElement("i");
+    if (i<S.level || (S.phase==="between" && i===S.level)) d.className="done";
+    else if (i===S.level) d.className="now";
+    el.appendChild(d);
+  }
+}
+
+function render(){
+  $("metaGroup").textContent = S.group ? (S.group+" · Samhällskunskap 2") : "Samhällskunskap 2 · Ekonomiska teorier";
+  if (S.phase==="start"){ show("vStart"); return; }
+  if (S.phase==="end"){
+    show("vEnd");
+    $("stTime").textContent = fmt((S.endTime-S.start)/1000);
+    $("stHints").textContent = S.hints; $("stWrong").textContent = S.wrong;
+    $("stGroup").textContent = S.group; $("stUnemp").textContent = fmtU(unemp()); return;
+  }
+  if (S.phase==="between"){
+    show("vBetween"); drawSteps($("steps2"));
+    $("betweenText").textContent = BETWEEN[S.level] + " Öppna kuvert " + (S.level+2) + ".";
+    return;
+  }
+  var L = LEVELS[S.level];
+  show("vLevel"); drawSteps($("steps"));
+  $("lvKicker").textContent = "Nivå " + (S.level+1) + " av " + LEVELS.length;
+  $("lvTitle").textContent = L.title;
+  $("lvStory").textContent = L.story;
+  $("lvTask").innerHTML = L.task;
+  $("hintBox").textContent = "Ledtråd: " + L.hint;
+  $("hintBox").classList.toggle("show", !!S.hintBought);
+  $("hintBtn").disabled = !!S.hintBought;
+  $("hintBtn").textContent = S.level===LEVELS.length-1 ? "Köp ledtråd" : "Köp ledtråd (−1 minut på nästa nivå)";
+  $("codeInput").placeholder = L.teacher ? "Lärarens kod" : "Koden";
+  $("codeInput").type = L.teacher ? "password" : "text";
+  $("codeMsg").textContent=""; $("codeMsg").className="msg";
+  tick();
+}
+
+function tick(){
+  if (S.phase!=="level") return;
+  drawMeter();
+  var now = Date.now();
+  var left = S.levelSec - (now - S.levelStart)/1000;
+  var t = $("timer");
+  if (left >= 0){
+    t.classList.remove("over");
+    $("digits").textContent = fmt(Math.ceil(left));
+    $("barFill").style.width = (100*left/S.levelSec)+"%";
+    $("timerNote").textContent = "";
+  } else {
+    if (!S.beeped){ S.beeped=true; save(); beep(); }
+    t.classList.add("over");
+    $("digits").textContent = "+" + fmt(-left);
+    $("barFill").style.width = "100%";
+    $("timerNote").textContent = "Tiden är slut. Arbetslösheten stiger varje minut tills ni har löst nivån.";
+  }
+  // spärr
+  var lock = S.lockUntil - now;
+  var btn = $("unlockBtn");
+  if (lock > 0){
+    btn.disabled = true; $("codeInput").disabled = true;
+    $("codeMsg").className="msg bad";
+    $("codeMsg").textContent = "Fel kod. Sidan är låst i " + Math.ceil(lock/1000) + " sekunder. Kontrollera ert material under tiden.";
+  } else if (btn.disabled){
+    btn.disabled = false; $("codeInput").disabled = false;
+    $("codeMsg").textContent = ""; $("codeMsg").className="msg";
+  }
+}
+setInterval(tick, 500);
+
+function startLevel(i){
+  S.level=i; S.phase="level"; S.levelStart=Date.now();
+  S.levelSec = Math.max(60, LEVELS[i].sec - S.penaltyNext);
+  S.penaltyNext=0; S.hintBought=false; S.beeped=false; S.lockUntil=0;
+  save(); render();
+}
+
+$("startBtn").onclick = function(){
+  var g = $("groupName").value.trim();
+  if (!g){ $("startMsg").textContent = "Skriv gruppens namn först."; return; }
+  S = fresh(); S.group=g; S.start=Date.now(); save(); startLevel(0);
+};
+$("nextBtn").onclick = function(){ startLevel(S.level+1); };
+
+function tryCode(){
+  if (S.phase!=="level" || Date.now() < S.lockUntil) return;
+  var v = $("codeInput").value; if (!norm(v)) return;
+  var hv = hash(v);
+  var ok = (hv === H.levels[S.level]) || (hv === H.teacher);
+  $("codeInput").value = "";
+  if (ok){
+    var om = overMin(); S.effect = (S.effect||0) + (om>0 ? 0.5*om : -0.5);
+    if (S.level === LEVELS.length-1){ S.phase="end"; S.endTime=Date.now(); save(); render(); return; }
+    S.phase="between"; save(); render();
+  } else {
+    S.wrong++; S.lockUntil = Date.now()+30000; save(); tick();
+  }
+}
+$("unlockBtn").onclick = tryCode;
+$("codeInput").addEventListener("keydown", function(e){ if (e.key==="Enter") tryCode(); });
+
+$("hintBtn").onclick = function(){
+  if (S.hintBought) return;
+  S.hintBought=true; S.hints++; if (S.level < LEVELS.length-1) S.penaltyNext=60;
+  save(); render();
+};
+
+// ---------- lärarläge ----------
+var prevView = null;
+$("teacherBtn").onclick = function(){
+  var k = prompt("Lärarkod");
+  if (!k) return;
+  if (hash(k) !== H.teacher){ alert("Fel kod."); return; }
+  var html = decrypt(FACIT, k);
+  if (!html){ alert("Facit kunde inte visas."); return; }
+  $("facitBox").innerHTML = html;
+  show("vTeacher");
+};
+$("closeTeacher").onclick = function(){ render(); };
+$("resetBtn").onclick = function(){
+  if (!confirm("Nollställa den här datorn? Gruppens framsteg försvinner.")) return;
+  S = fresh(); save(); $("groupName").value=""; render();
+};
+
+render();
+})();
+</script>
+</body>
+</html>
