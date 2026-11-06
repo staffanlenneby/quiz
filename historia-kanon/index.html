@@ -163,7 +163,7 @@ const AREAS = {
   med:  { name: "Medeltid", ref: "Kanonen, punkt 7–13", plan: "Rita en tidslinje från 476 till 1453. Lär dig kedjan från digerdöden till högre löner och svagare feodalism." },
   tid:  { name: "Tidigmodern tid", ref: "Kanonen, punkt 14–19", plan: "Lär dig kedjan 1450, 1517, 1523: tryckpressen, Luther och Gustav Vasa. Lär dig vad trettioåriga kriget gav Sverige och vad som hände 1721." },
   rev:  { name: "Revolutionernas tid", ref: "Kanonen, punkt 20–29", plan: "Lär dig 1776, 1789 och 1815 i ordning. Koppla 1809 och 1866 till hur makten flyttade från kungen i Sverige." },
-  kung: { name: "Kungalängden", ref: "Kanonen, kungalängden", plan: "Lär dig de markerade kungarna med regeringsår och en händelse var. Säg dem högt i ordning från Gustav Vasa till Carl XVI Gustaf." },
+  kung: { name: "Kungalängden", ref: "Kanonen, kungalängden", plan: "Lär dig de åtta markerade kungarna med regeringsår och en händelse var. Säg dem högt i ordning från Gustav Vasa till Carl XVI Gustaf." },
 };
 
 // o: alternativ, c: index för rätt svar, w: varför varje fel alternativ är fel, f: förklaring
@@ -193,7 +193,7 @@ const Q = [
     w: [null, "380 blev kristendomen statsreligion.", "1453 räknas ofta som slutet på medeltiden.", "27 f.Kr. blev Augustus kejsare."],
     f: "476 föll Västromerska riket. Det brukar räknas som slutet på antiken och början på medeltiden." },
 
-  { a: "med", q: "Vad hände år 622?",
+  { a: "med", q: "Vad hände år 622, enligt kanonen?",
     o: ["Muhammed flyttade till Medina och islams tideräkning började", "Korstågen började", "Vikingatiden började", "Konstantinopel erövrades"], c: 0,
     w: [null, "Korstågen började 1096.", "Vikingatiden brukar räknas från 793.", "Konstantinopel erövrades 1453."],
     f: "Islam spreds sedan snabbt, från Spanien i väster till Indien i öster." },
@@ -231,9 +231,9 @@ const Q = [
     w: [null, "Luther använde tvärtom tryckpressen för att sprida sina idéer.", "Korstågen var slut sedan länge.", "Luther fick stöd av furstar och kungar."],
     f: "Kyrkan sålde avlatsbrev som sades förkorta tiden i skärselden. Kritiken blev början på reformationen och kyrkans splittring." },
   { a: "tid", q: "Vad gjorde Gustav Vasa med kyrkan i Sverige?",
-    o: ["Tog kyrkans egendom och gjorde Sverige protestantiskt", "Gav kyrkan mer jord för att få dess stöd", "Lät påven utse Sveriges ärkebiskop", "Gjorde kyrkan oberoende av kungen"], c: 0,
+    o: ["Bröt med påven och tog kyrkans egendom", "Gav kyrkan mer jord för att få dess stöd", "Lät påven utse Sveriges ärkebiskop", "Gjorde kyrkan oberoende av kungen"], c: 0,
     w: [null, "Han tog jord från kyrkan, han gav den ingen.", "Han bröt med påven.", "Kyrkan blev tvärtom underordnad kungen."],
-    f: "Gustav Vasa blev kung 1523. Vid Västerås riksdag 1527 gick kyrkans egendom till kronan." },
+    f: "Gustav Vasa blev kung 1523. Vid Västerås riksdag 1527 gick kyrkans egendom till kronan. Den lutherska läran slogs fast först vid Uppsala möte 1593." },
   { a: "tid", q: "Vad var triangelhandeln?",
     o: ["Handel mellan Europa, Afrika och Amerika med varor och slavar", "Handel mellan Sverige, Danmark och Norge", "Handel med kryddor mellan Indien, Kina och Europa", "Handel mellan de tyska hansastäderna"], c: 0,
     w: [null, "Det var tre riken i en union, inte en handelsväg.", "Kryddhandeln gick österut. Triangelhandeln gick över Atlanten.", "Det var Hansans handel i Nordeuropa."],
@@ -319,7 +319,7 @@ const Q = [
   { a: "kung", q: "Vilken kung bröt med Kalmarunionen och regerade 1523–1560?",
     o: ["Gustav Vasa", "Erik XIV", "Karl IX", "Johan III"], c: 0,
     w: [null, "Erik XIV var Gustav Vasas son och regerade 1560–1568.", "Karl IX regerade 1599–1611.", "Johan III regerade 1568–1592."],
-    f: "Gustav Vasa gjorde också Sverige protestantiskt." },
+    f: "Under Gustav Vasas tid bröt Sverige med påven." },
 ];
 
 const el = id => document.getElementById(id);
