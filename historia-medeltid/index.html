@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forntiden, antiken och medeltiden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+/* Layout: en smal kolumn, ett kort i taget. Skifferblått och guld som i lektionernas bilder. */
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #2B3445; --muted: #5E6878; --line: #DCE0E7;
+  --navy: #37435A; --gold: #B07D1F; --goldbg: #F8ECD6;
+  --ok: #2E7D4F; --okbg: #E3F2E9; --bad: #B03A2E; --badbg: #FBE7E4;
+  --sel: #E6EAF2;
+  --font: "Lato", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161B24; --card: #1F2633; --ink: #E7EAF0; --muted: #A3ACBB; --line: #333C4C;
+  --navy: #9FB2D6; --gold: #E2B969; --goldbg: #3A3222;
+  --ok: #6FCB95; --okbg: #1D3328; --bad: #F08D80; --badbg: #3A2220; --sel: #2B3446; color-scheme: dark }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body { color: var(--ink); font-family: var(--font); font-size: 17px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: 1.9rem; font-weight: 900; color: var(--navy); margin: 0; line-height: 1.15; text-wrap: balance; }
+h2 { font-size: 1.25rem; color: var(--navy); margin: 0; text-wrap: balance; }
+.eyebrow { font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 22px; display: grid; gap: 14px; }
+.muted { color: var(--muted); }
+p { margin: 0; }
+ol.rules { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+button { font: inherit; cursor: pointer; border-radius: 8px; border: 1px solid transparent; padding: 12px 18px; font-weight: 700; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.primary { background: var(--navy); color: var(--card); }
+.secondary { background: transparent; color: var(--navy); border-color: var(--line); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .9rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--gold); width: 0; transition: width .3s; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--goldbg); color: var(--ink); }
+.qtext { font-size: 1.2rem; font-weight: 700; line-height: 1.4; }
+.think { background: var(--goldbg); border-radius: 8px; padding: 12px 14px; font-size: .95rem; }
+.opts { display: grid; gap: 10px; }
+.opt { text-align: left; background: var(--card); color: var(--ink); border: 1.5px solid var(--line); font-weight: 400; display: flex; gap: 12px; align-items: flex-start; }
+.opt .k { flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; display: grid; place-items: center; background: var(--sel); font-weight: 700; font-size: .85rem; }
+.opt.chosen { border-color: var(--navy); background: var(--sel); }
+.opt.right { border-color: var(--ok); background: var(--okbg); }
+.opt.wrong { border-color: var(--bad); background: var(--badbg); }
+.opt:disabled { opacity: 1; cursor: default; }
+.verdict { font-weight: 900; font-size: 1.1rem; }
+.verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
+.fb { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+.fb b { color: var(--navy); }
+.ref { font-size: .85rem; color: var(--muted); }
+.score { font-size: 2.6rem; font-weight: 900; color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pill { font-size: .8rem; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.pill.s { background: var(--okbg); color: var(--ok); } .pill.r { background: var(--goldbg); color: var(--gold); } .pill.p { background: var(--badbg); color: var(--bad); }
+ul.list, ol.list { margin: 0; padding-left: 1.2em; display: grid; gap: 10px; }
+ul.list li span, ol.list li span { display: block; color: var(--muted); font-size: .95rem; }
+.keys { font-size: .8rem; color: var(--muted); }
+@media (max-width: 480px) { body { font-size: 16px; } h1 { font-size: 1.55rem; } .card { padding: 16px; } .qtext { font-size: 1.1rem; } }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+<section id="start" class="card">
+  <span class="eyebrow">Historia 1b · Inför testet</span>
+  <h1>Forntiden, antiken och medeltiden</h1>
+  <p>40 flervalsfrågor om fakta, som på testet. Ett resultat runt 70 procent på första försöket är bra.</p>
+  <h2>Så fungerar det</h2>
+  <ol class="rules">
+    <li>Frågan visas först utan svarsalternativ. Svara i huvudet innan du klickar på Visa alternativ.</li>
+    <li>Välj ett alternativ och tala om ifall du är säker eller gissar.</li>
+    <li>Svarar du fel får du veta varför just ditt svar var fel. Frågan kommer sedan tillbaka efter några andra frågor, och du måste svara rätt på den två gånger.</li>
+    <li>Poängen räknas på ditt första försök. På resultatsidan ser du vilka områden du behöver plugga och vilka fel du var säker på.</li>
+  </ol>
+  <p class="muted">Frågorna kommer i blandad ordning från forntiden till senmedeltiden. Räkna med 25–35 minuter. På resultatsidan får du veta vad du ska läsa på mer om.</p>
+  <div class="row"><button id="startBtn" class="primary">Starta quizet</button></div>
+</section>
+
+<section id="quiz" class="card" hidden>
+  <div class="top"><span id="prog"></span><span id="queueInfo"></span></div>
+  <div class="bar"><i id="barFill"></i></div>
+  <div class="row"><span id="again" class="badge" hidden>Tillbaka: svara rätt igen</span><span id="areaTag" class="eyebrow" hidden></span></div>
+  <p id="qtext" class="qtext"></p>
+
+  <div id="thinkBox" class="think">Svara i huvudet först. Klicka sedan på Visa alternativ.</div>
+  <div id="showRow" class="row"><button id="showBtn" class="primary">Visa alternativ</button><span class="keys">eller tryck mellanslag</span></div>
+
+  <div id="opts" class="opts" hidden></div>
+  <div id="answerRow" class="row" hidden>
+    <button id="sureBtn" class="primary" disabled>Svara: jag är säker</button>
+    <button id="guessBtn" class="secondary" disabled>Svara: jag gissar</button>
+    <span class="keys">1–4 väljer, S eller G svarar</span>
+  </div>
+
+  <div id="fb" class="fb" hidden>
+    <p id="verdict" class="verdict"></p>
+    <p id="whyWrong" hidden></p>
+    <p id="explain"></p>
+    <p id="ref" class="ref"></p>
+    <p id="comeback" class="muted" hidden>Frågan kommer tillbaka om en stund.</p>
+    <div class="row"><button id="nextBtn" class="primary">Nästa fråga</button><span class="keys">eller tryck Enter</span></div>
+  </div>
+</section>
+
+<section id="result" hidden>
+  <div class="wrap">
+    <div class="card">
+      <span class="eyebrow">Resultat på första försöket</span>
+      <p class="score" id="score"></p>
+      <p id="scoreNote"></p>
+    </div>
+    <div class="card">
+      <h2>Per område</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Område</th><th>Rätt</th><th>Läge</th></tr></thead>
+        <tbody id="areaRows"></tbody>
+      </table></div>
+      <p class="muted">Sitter: 80 procent eller mer. Repetera: 50–79 procent. Plugga mer: under 50 procent.</p>
+    </div>
+    <div class="card" id="sureWrongCard">
+      <h2>Fel som du var säker på</h2>
+      <p class="muted">Det här är missuppfattningar. De är farligast, eftersom du inte vet om dem. Läs rätt svar och förklaringen en gång till.</p>
+      <ul class="list" id="sureWrong"></ul>
+    </div>
+    <div class="card">
+      <h2 id="planHead">Plugga på det här, i den här ordningen</h2>
+      <ol class="list" id="plan"></ol>
+    </div>
+    <div class="card">
+      <div class="row">
+        <button id="retryWrong" class="primary">Gör om dina fel</button>
+        <button id="restart" class="secondary">Gör om hela quizet</button>
+      </div>
+      <p class="muted">Bäst effekt får du om du gör om quizet i morgon eller om ett par dagar, inte direkt.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const AREAS = {
+  forn: { name: "Forntiden", ref: "inledning och sammanfattning s. 35, 44 och 45", plan: "Läs sammanfattningen och lär dig årtalen: homo sapiens för 200 000 år sedan, jordbruket för 10 000 år sedan och högkulturerna omkring 3000 f.Kr. Lär dig kedjan jordbruk, överskott, arbetsdelning, skrift." },
+  grek: { name: "Antikens Grekland", ref: "inledning och sammanfattning s. 51 och 68–69", plan: "Lär dig hur demokratin i Aten fungerade och vilka som stod utanför. Jämför Aten och Sparta, och lär dig Alexander den store och de tre filosoferna." },
+  rom:  { name: "Romarriket", ref: "sammanfattning s. 68–69", plan: "Lär dig årtalen: kungadöme, republik omkring 500 f.Kr., kejsardöme efter Caesar, delningen 395. Rita kedjan från erövringar till inbördeskrig." },
+  med:  { name: "Medeltiden i Europa", ref: "inledning och sammanfattning s. 75 och 96–101", plan: "Lär dig de tre delarna: äldre medeltid, högmedeltiden (ca 1000–1300) och senmedeltiden. Rita vasallsystemet och kedjan från digerdöden till bättre villkor." },
+  sve:  { name: "Svensk medeltid", ref: "sammanfattning s. 96–101", plan: "Gör en tidslinje: Birger jarl på 1200-talet, Alsnö stadga 1280, Kalmarunionen 1397 och Engelbrektsupproret. Lär dig de fyra sorternas bönder." },
+};
+
+// o: alternativ, c: index för rätt svar, w: varför varje fel alternativ är fel, f: förklaring
+const Q = [
+  // ---------- forn ----------
+  { a: "forn", q: "Vad skilde enligt boken de första människoliknande varelserna från aporna?",
+    o: ["En mycket större hjärna", "Förmågan att gå på två ben", "Förmågan att tala", "Att de använde eld"], c: 1,
+    w: ["Boken säger tvärtom att det inte var hjärnan. Den växte först senare.", null, "Språket kom långt senare, med homo sapiens.", "Elden kom ungefär en miljon år efter de första stenverktygen."],
+    f: "När skogarna i Afrika glesnade blev det en fördel att gå upprätt. Händerna blev fria, och samarbete och minne gjorde att hjärnan utvecklades efter hand." },
+  { a: "forn", q: "Varför uppkom skillnaden mellan fattig och rik med jordbruket?",
+    o: ["Jägarna hade redan stora förmögenheter som de tog med sig.", "Bofasta människor kunde samla ägodelar och överskott, och hövdingar kunde kräva del av skörden.", "Jordbruket gav mindre mat, så folk började stjäla.", "Kungarna införde pengar samtidigt som jordbruket."], c: 1,
+    w: ["Jägare och samlare flyttade runt och kunde inte samla mycket egendom.", null, "Jordbruket gav mer mat, inte mindre.", "Pengar kom långt senare."],
+    f: "När man blev bofast och producerade mer fanns det något att äga och något att ta. Hövdingar krävde del av skörden, och erövringar och krig blev en del av livet." },
+  { a: "forn", q: "Vad var en nackdel med jordbruket jämfört med att jaga och samla?",
+    o: ["Färre människor kunde försörjas.", "Man måste flytta hela tiden.", "Hårdare arbete, ensidig kost och svält vid missväxt.", "Det gick inte att spara mat."], c: 2,
+    w: ["Tvärtom kunde många fler försörjas.", "Jordbrukarna blev bofasta. Det var jägarna som flyttade.", null, "Jordbrukarna kunde lägga upp förråd. Det var en fördel."],
+    f: "Jordbruket gav mer mat totalt, men den enskilda människan fick arbeta hårdare. Kosten blev ensidig, sjukdomar spreds i byarna och en dålig skörd betydde svält." },
+  { a: "forn", q: "Varför uppstod de första högkulturerna vid stora floder?",
+    o: ["Floderna skyddade mot alla fiender.", "Floderna gav vatten och bördigt slam, och med kanaler kunde många försörjas.", "Det regnade mest vid floderna.", "Floderna var de enda platserna där det fanns människor."], c: 1,
+    w: ["Tvåflodslandet hade många småriken som krigade mot varandra.", null, "Slätterna vid Eufrat och Tigris var torra. Därför behövdes bevattning.", "Människor fanns över hela jorden."],
+    f: "Bevattning med dammar och kanaler gav ett överskott av mat. Då behövde inte alla odla, och städer, präster, kungar, skrift och hantverk kunde växa fram." },
+  { a: "forn", q: "Vad är en gånggrift?",
+    o: ["En skrift med kilformade tecken", "Ett stort gravmonument av sten från bondestenåldern", "En väg där handelsmän gick mellan städer", "En grav från vikingatiden med ett skepp"], c: 1,
+    w: ["Det är kilskrift, från tvåflodslandet.", null, "Ordet har inget med handel att göra.", "Gånggrifterna är flera tusen år äldre än vikingatiden."],
+    f: "Gånggrifter byggdes av de första bönderna i Norden. Många människor måste hjälpas åt, vilket tyder på att de var organiserade under en hövding. De flesta i Sverige finns runt Falköping." },
+  { a: "forn", q: "Hammurabis lag gav ”öga för öga”. Vem gällde det för?",
+    o: ["Alla människor i riket", "Bara välborna som skadade andra välborna", "Bara slavar", "Bara kungen och hans familj"], c: 1,
+    w: ["Lagen skilde på grupper. Skadade man en friboren eller en slav betalade man i silver.", null, "Slavarna räknades som egendom. Den som skadade en slav betalade halva slavens värde.", "Lagen gällde många, men olika straff för olika grupper."],
+    f: "Samhället hade tre grupper: välborna, friborna och slavar. Samma skada straffades olika beroende på vem som drabbades. Lagen visar ett tydligt klassamhälle." },
+
+  { a: "forn", q: "När uppstod vår egen art, homo sapiens, och var?",
+    o: ["För ca 2,5 miljoner år sedan i Asien", "För ca 200 000 år sedan i Afrika", "För ca 40 000 år sedan i Europa", "För ca 10 000 år sedan i Mellanöstern"], c: 1,
+    w: ["Då gjordes de första stenverktygen, långt före homo sapiens.", null, "Då kom homo sapiens till Europa, men arten uppstod tidigare i Afrika.", "Då började jordbruket."],
+    f: "Homo sapiens uppstod i Afrika och spred sig sedan över jorden. Det som skilde arten från föregångarna var bland annat språket." },
+  { a: "forn", q: "Vad användes skriften först till i tvåflodslandet?",
+    o: ["Att skriva dikter", "Att förteckna varor och handelsaffärer", "Att skriva brev mellan kungar", "Att skriva ner Bibeln"], c: 1,
+    w: ["Litterära verk som Gilgamesh kom, men inte först.", null, "Det var inte den första användningen.", "Bibeln skrevs mycket senare."],
+    f: "De flesta bevarade lertavlorna med kilskrift handlar om varor och affärer. Senare skrevs också lagar och myter ner." },
+
+  // ---------- grek ----------
+  { a: "grek", q: "Varför räknade sig grekerna som ett folk fast landet var uppdelat i många stadsstater?",
+    o: ["De hade en gemensam kung.", "De hade samma språk och religion, och gemensamma platser som Delfi och Olympia.", "De hade samma lagar i alla städer.", "De var alla medborgare i Aten."], c: 1,
+    w: ["Varje stadsstat styrde sig själv. Det fanns ingen gemensam kung.", null, "Lagarna skilde sig mycket, till exempel mellan Aten och Sparta.", "Bara den som var född i Aten av atenska föräldrar kunde bli medborgare där."],
+    f: "Stadsstaterna var ömsom förbundna, ömsom fiender. Det som höll grekerna samman var språket, religionen, oraklet i Delfi och spelen i Olympia." },
+  { a: "grek", q: "Vilka fick delta i folkförsamlingen i Aten på 400-talet f.Kr.?",
+    o: ["Alla som bodde i Aten", "Alla vuxna män och kvinnor", "Fria män som var medborgare, ungefär 35 000 av 300 000", "Bara de rikaste familjerna"], c: 2,
+    w: ["Slavar, kvinnor och invandrare stod utanför.", "Kvinnorna fick inte delta i politiken alls.", null, "Fattiga och rika medborgare hade samma rätt. Uppdragen var avlönade så att fattiga kunde delta."],
+    f: "Demokratin i Aten gav makt åt en ganska bred grupp jämfört med andra riken, men en majoritet av invånarna stod utanför." },
+  { a: "grek", q: "Hur skilde sig Sparta från Aten?",
+    o: ["Sparta var en demokrati och Aten en diktatur.", "Sparta var en militärstat där pojkarna tränades i kaserner.", "Sparta var en handelsstad med stark flotta.", "Sparta hade inga slavar."], c: 1,
+    w: ["Det var tvärtom.", null, "Det stämmer bättre på Aten, som hade flottan.", "Sparta byggde på ofria jordbrukare som arbetade åt medborgarna."],
+    f: "I Sparta levde pojkarna i militärkaserner tills de var 30 år. Sparta vann till slut kriget mot Aten 404 f.Kr." },
+  { a: "grek", q: "Vem menade att det vi ser bara är skuggor av en högre idévärld?",
+    o: ["Sofisterna", "Platon", "Aristoteles", "Demokritos"], c: 1,
+    w: ["Sofisterna menade att inget är rätt eller fel, allt beror på perspektiv.", null, "Aristoteles menade att det bara finns en värld, och att vi ska undersöka den.", "Demokritos menade att allt består av små atomer."],
+    f: "Platon byggde på Sokrates: det finns eviga sanningar. Aristoteles var Platons elev men ville undersöka den värld vi faktiskt ser." },
+  { a: "grek", q: "Vad var hellenismen?",
+    o: ["Den grekiska demokratin", "Blandningen av grekisk och österländsk kultur efter Alexander den stores erövringar", "Grekernas krig mot Perserriket", "Den grekiska religionen med Zeus och Athena"], c: 1,
+    w: ["Demokratin hörde till Aten på 400-talet. Hellenismen kom senare.", null, "Perserkrigen var i början av 400-talet f.Kr.", "Religionen är äldre än hellenismen."],
+    f: "Alexander erövrade riket från Grekland till Indien på 300-talet f.Kr. Folk med olika språk och idéer möttes, och kulturerna blandades." },
+
+  // ---------- rom ----------
+  { a: "rom", q: "Hur skilde sig den romerska republiken från demokratin i Aten?",
+    o: ["Rom var mer demokratiskt än Aten.", "I Rom låg makten hos patricierna och senaten, och folkförsamlingen hade liten makt.", "Rom hade ingen folkförsamling.", "I Rom fick kvinnorna rösta."], c: 1,
+    w: ["Det var tvärtom.", null, "Plebejerna hade rätt att delta i folkförsamlingen, men den hade liten makt.", "Kvinnorna hade bättre ställning än i Aten, men fick inte rösta."],
+    f: "De viktigaste besluten fattades i senaten, där de mäktigaste patricierna satt. Rom var en republik men inte särskilt demokratiskt." },
+  { a: "rom", q: "Varför förlorade många romerska bönder sin jord?",
+    o: ["Kejsaren tog jorden ifrån dem.", "De var borta i krig länge och konkurrerade med billig spannmål från provinserna.", "Jorden blev förstörd av vulkanutbrott.", "Slavarna gjorde uppror och tog jorden."], c: 1,
+    w: ["Det skedde under republiken, före kejsartiden.", null, "Pompeji förstördes, men det förklarar inte bondeproblemet.", "Spartacusupproret slogs ner. Slavarna tog ingen jord."],
+    f: "De rika köpte jorden och byggde storgods, latifundier, där slavar arbetade. Bönderna flyttade in till städerna som proletärer." },
+  { a: "rom", q: "Vad betyder ”bröd och skådespel”?",
+    o: ["Att romarna åt på teatern", "Att politiker gav de fattiga mat och underhållning för att vinna deras stöd", "Att bara rika fick gå på gladiatorspel", "Att bagare och skådespelare var de viktigaste yrkena"], c: 1,
+    w: ["Uttrycket handlar om politik, inte matvanor.", null, "Spelen bekostades för att locka just de fattiga.", "Uttrycket säger inget om yrken."],
+    f: "Proletärerna hade rösträtt i folkförsamlingen. Politiker som Caesar delade ut spannmål och bekostade spel för att få deras stöd." },
+  { a: "rom", q: "Varför blev generalerna så mäktiga i slutet av republiken?",
+    o: ["Senaten gav dem makten frivilligt.", "Soldaterna var lojala mot generalen som betalade dem, inte mot staten.", "Generalerna valdes av folket.", "De hade stöd av kyrkan."], c: 1,
+    w: ["Senaten försökte tvärtom hålla tillbaka generalerna.", null, "Generaler valdes inte av folket till makten.", "Kristendomen var ännu inte stor."],
+    f: "Generalerna värvade egendomslösa proletärer som fick lön, byte och jord. Arméerna blev verktyg i kampen om makten, och inbördeskrig bröt ut." },
+  { a: "rom", q: "Vad gjorde Augustus för att få slut på inbördeskrigen?",
+    o: ["Han avskaffade armén.", "Han lät staten betala soldaterna och tog själv kontrollen över armén.", "Han gav senaten all makt.", "Han flyttade huvudstaden till Konstantinopel."], c: 1,
+    w: ["Armén fanns kvar men lydde staten.", null, "Augustus samlade makten hos sig själv, även om senaten fanns kvar.", "Det var Konstantin, flera hundra år senare."],
+    f: "Augustus reformerade också skatterna och gav de fattiga spannmål. Därefter följde pax romana, ungefär 200 år av fred." },
+  { a: "rom", q: "Varför blev kristendomen så framgångsrik i Romarriket?",
+    o: ["Kejsarna tvingade alla att bli kristna från början.", "Budskapet vände sig till alla: rika och fattiga, män och kvinnor.", "Den var den äldsta religionen i riket.", "Den krävde inga regler."], c: 1,
+    w: ["Kristna förföljdes först. Konstantin gynnade dem först på 300-talet.", null, "De gamla gudarna var äldre.", "Kristendomen hade tydliga regler."],
+    f: "Kristendomen kunde nå många grupper. När den hade blivit stark valde Konstantin att gynna den, och den blev statsreligion." },
+
+  { a: "rom", q: "Vad hände med Romarriket år 395?",
+    o: ["Caesar mördades.", "Det delades i Västrom med Rom och Östrom med Konstantinopel, nuvarande Istanbul.", "Kristendomen förbjöds.", "Det erövrades av perserna."], c: 1,
+    w: ["Caesar mördades 44 f.Kr.", null, "Kristendomen blev tvärtom statsreligion på 300-talet.", "Perserna erövrade aldrig Rom."],
+    f: "Östrom levde vidare i ytterligare tusen år. Västrom löstes upp under 400-talet, och det brukar ses som slutet på antiken." },
+
+  // ---------- aldre ----------
+  { a: "med", q: "Vad hände med Konstantinopel när Västrom föll?",
+    o: ["Staden förstördes samtidigt.", "Östrom levde vidare i tusen år med Konstantinopel som huvudstad.", "Den blev huvudstad i Karl den stores rike.", "Den erövrades direkt av Muhammed."], c: 1,
+    w: ["Östrom klarade sig.", null, "Karl den stores rike låg i Västeuropa.", "Konstantinopel föll först 1453, till osmanerna."],
+    f: "I Konstantinopel levde romersk och grekisk kultur vidare. Mycket av antikens kunskap bevarades där." },
+  { a: "med", q: "Varför stämmer det bara delvis att äldre medeltid var en mörk tid?",
+    o: ["För att det var varmt klimat", "För att kulturen blomstrade i Konstantinopel och arabvärlden, medan Västeuropa gick tillbaka", "För att Västeuropa hade många stora städer", "För att det inte fanns några krig"], c: 1,
+    w: ["Klimatet förklarar inte frågan.", null, "Städerna krympte i Västeuropa.", "Det var många krig och plundringståg."],
+    f: "Handel och städer minskade i Västeuropa. Men i Konstantinopel och arabvärlden studerades de gamla grekernas skrifter, och i väst bevarade klostren texter." },
+  { a: "med", q: "Hur spreds islam jämfört med kristendomen?",
+    o: ["Båda spreds lika långsamt.", "Islam spreds snabbt genom erövringar, kristendomen långsamt under flera hundra år.", "Islam spreds bara genom handel.", "Kristendomen spreds snabbare än islam."], c: 1,
+    w: ["Islam spreds på drygt hundra år.", null, "Erövringar var viktiga för islams snabba spridning.", "Det var tvärtom."],
+    f: "Från 600-talet spreds islam från Spanien till Indien. En kulturgräns uppstod mellan kristna och muslimska områden runt Medelhavet." },
+
+  // ---------- feod ----------
+  { a: "med", q: "Vad innebar vasallsystemet?",
+    o: ["Bönderna valde sin kung.", "Kungen gav jord till stormän mot att de svor trohet och ställde upp med ryttare.", "Kyrkan ägde all jord.", "Alla fria män var soldater utan lön."], c: 1,
+    w: ["Bönderna hade ingen sådan makt.", null, "Kyrkan ägde mycket jord, men systemet handlade om kungen och stormännen.", "Systemet uppstod just för att ryttare var dyra och behövde jord."],
+    f: "Länet var jorden. Vasallen kunde i sin tur ge delar av sitt län till undervasaller. Att bryta sin ed var ett av de värsta brotten." },
+  { a: "med", q: "Vad är skillnaden mellan en livegen bonde och en slav under antiken?",
+    o: ["Ingen skillnad alls", "Den livegne fick inte flytta, men hade familj och egen gård och ägdes inte som en sak.", "Den livegne var fri att flytta vart han ville.", "Slaven hade fler rättigheter än den livegne."], c: 1,
+    w: ["Det fanns viktiga skillnader.", null, "Den livegne var bunden till godset.", "Det var tvärtom."],
+    f: "Den livegne arbetade på herrens jord och lämnade en del av skörden. Herren skulle skydda honom. Slaven var egendom." },
+  { a: "med", q: "Vad säger tanken om ”Guds ordning i världen”?",
+    o: ["Att alla människor är lika", "Att Gud gett var och en sin plats: de som ber, de som strider och de som arbetar", "Att kungen alltid hade rätt", "Att kyrkan skulle styra alla länder"], c: 1,
+    w: ["Läran förklarade tvärtom varför människor hade olika ställning.", null, "Idealet kunde också användas för att kritisera kungar som inte levde som de skulle.", "Läran handlade om samhällets ordning, inte om att kyrkan skulle ta makten."],
+    f: "Läran rättfärdigade ojämlikheten. Men den gav också mening åt livet och ett ideal att jämföra makthavarna med." },
+  { a: "med", q: "Vad menas med naturahushållning?",
+    o: ["Att leva av jakt och fiske", "Att själv producera nästan allt man behöver, utan att använda pengar", "Att sälja sina varor på marknaden", "Att odla bara grönsaker"], c: 1,
+    w: ["Medeltidens bönder var jordbrukare.", null, "Det är motsatsen, penninghushållning.", "Ordet handlar om hur man försörjde sig, inte om vad man odlade."],
+    f: "Under äldre medeltid fanns lite handel. Bönderna gjorde bröd, kläder och verktyg själva." },
+
+  // ---------- hog ----------
+  { a: "med", q: "Varför var tresädet ett framsteg?",
+    o: ["Man kunde odla tre gånger om året.", "Bara en tredjedel av jorden vilade varje år i stället för hälften.", "Tre familjer kunde dela på en gård.", "Det krävde inga dragdjur."], c: 1,
+    w: ["Man skördade en gång om året.", null, "Ordet handlar om hur åkern delades, inte om familjer.", "Dragdjuren var viktiga, särskilt med hjulplogen."],
+    f: "Med tresäde och hjulplog ökade skördarna. Fler kunde försörjas, befolkningen växte och städerna kom tillbaka." },
+  { a: "med", q: "Vad var ett skrå?",
+    o: ["En kyrklig skatt", "En förening för hantverkare i samma yrke", "En sorts mynt", "Ett förbund av handelsstäder"], c: 1,
+    w: ["Kyrkans skatt hette tionde.", null, "Skrået var en organisation, inte pengar.", "Det är Hansan."],
+    f: "Skråna kontrollerade pris och kvalitet och bestämde vem som fick bli mästare. Vägen gick från lärling till gesäll till mästare." },
+  { a: "med", q: "Vad var Hansan?",
+    o: ["Handelsvägen mellan Kina och Medelhavet", "Ett förbund av tyska handelsstäder som styrde handeln i Östersjön", "Den svenska kungens armé", "En riddarorden från korstågen"], c: 1,
+    w: ["Det är Sidenvägen.", null, "Hansan var en handelsorganisation.", "Riddarordnarna hade inget med Hansan att göra."],
+    f: "Hansan hade stor makt i Norden. Den kom i konflikt med Erik av Pommern och motsatte sig en stark nordisk stat." },
+
+  // ---------- sen ----------
+  { a: "med", q: "Hur kunde fattiga bönder få det bättre efter digerdöden?",
+    o: ["Kungen delade ut pengar till dem.", "Arbetskraften blev bristvara, så de överlevande kunde kräva högre lön och lägre avgifter.", "Adeln dog ut helt.", "Kyrkan gav dem all sin jord."], c: 1,
+    w: ["Det gjorde kungen inte.", null, "Adeln fanns kvar, men förlorade inkomster.", "Kyrkan behöll sin jord."],
+    f: "Pesten dödade kanske en tredjedel av Europas befolkning. Det fanns gott om jord och för få som kunde bruka den." },
+  { a: "med", q: "Varför stannade folkökningen i Europa av kring år 1300?",
+    o: ["Krig dödade alla unga män.", "Den odlingsbara jorden räckte inte till fler, och det blev svält.", "Pesten kom redan år 1300.", "Folk slutade gifta sig."], c: 1,
+    w: ["Krig förklarar inte hela Europa.", null, "Digerdöden kom 1347–1350.", "Det saknar stöd i boken."],
+    f: "Efter flera hundra år av växande befolkning tog den bördiga jorden slut. Svältkatastrofer visade att försörjningen nått sin gräns." },
+  { a: "med", q: "Hur förändrades krigföringen under hundraårskriget?",
+    o: ["Riddarna blev ännu viktigare.", "Fotsoldater med långbågar slog ut riddarna, och betalda arméer krävde starka kungar.", "Kriget fördes mest till sjöss.", "Man slutade använda soldater."], c: 1,
+    w: ["Riddarnas tid var på väg att ta slut.", null, "Kriget fördes nästan bara på fransk mark.", "Det var ett krig mellan arméer."],
+    f: "Kriget mellan England och Frankrike 1337–1453 visade att den nya tidens vapen var långbåge och krut. Det gynnade kungar som kunde betala." },
+  { a: "med", q: "Vad var gemensamt för John Wycliff och Jan Hus?",
+    o: ["Båda var påvar.", "Båda kritiserade kyrkans rikedom och makt.", "Båda ledde korståg.", "Båda var kungar i England."], c: 1,
+    w: ["De var kritiker av påvemakten.", null, "De hade inget med korstågen att göra.", "Wycliff var teolog i England och Hus rektor i Prag."],
+    f: "De menade att Bibeln inte talar om påvar och biskopar. Bönder och hantverkare tog stöd i deras idéer när de gjorde uppror." },
+
+  { a: "med", q: "När nådde digerdöden Europa, och hur många dog ungefär?",
+    o: ["År 1066, ungefär en tiondel", "År 1346, ungefär en tredjedel", "År 1453, ungefär hälften", "År 1250, nästan alla i städerna"], c: 1,
+    w: ["1066 erövrade normanderna England.", null, "1453 föll Konstantinopel.", "Pesten kom senare, och många överlevde även i städerna."],
+    f: "Pesten kom längs Sidenvägen via Krim. De som överlevde fick ofta bättre villkor, eftersom arbetskraften blev bristvara." },
+
+  // ---------- sve ----------
+  { a: "sve", q: "Vad bestämdes i Alsnö stadga 1280?",
+    o: ["Att Sverige skulle bli kristet", "Att stormän som ställde upp med ryttare slapp skatt, vilket skapade adeln", "Att Sverige, Norge och Danmark skulle ha en kung", "Att träldomen förbjöds"], c: 1,
+    w: ["Kristnandet skedde långt tidigare.", null, "Det är Kalmarunionen 1397.", "Träldomen förbjöds 1335."],
+    f: "Magnus Ladulås lät bönderna betala skatt i stället för att ställa upp som soldater. Stormännen fick skattefrihet, frälse, mot att de rustade ryttare." },
+  { a: "sve", q: "Vem brukade en frälsebonde jorden åt?",
+    o: ["Kungen", "Kyrkan", "Adeln", "Sig själv"], c: 2,
+    w: ["Kungens bönder var kronobönder.", "Kyrkans bönder var kyrkobönder.", null, "Bönder som ägde sin egen gård var skattebönder."],
+    f: "Frälsebönder betalade avgift till adelsmannen, inte skatt till kungen. Det var en del av adelns privilegier." },
+  { a: "sve", q: "Vad skiljde Sverige från stora delar av Europa under medeltiden?",
+    o: ["Sverige hade ingen adel.", "Sverige fick aldrig någon livegenskap, och bönderna ägde mycket jord.", "Sverige hade inga kloster.", "Sverige var aldrig kristet."], c: 1,
+    w: ["Adeln uppstod genom Alsnö stadga 1280.", null, "Det fanns kloster, till exempel Vreta och Vadstena.", "Sverige kristnades under vikingatid och tidig medeltid."],
+    f: "Böndernas starka ställning gjorde att de fick delta i de första riksdagarna i början av 1500-talet." },
+  { a: "sve", q: "Varför bildades Kalmarunionen 1397?",
+    o: ["Hansan ville ha en stark nordisk stat.", "Svensk adel ville bli av med kung Albrekt, och Margareta var släkt med de nordiska kungahusen.", "Sverige erövrade Danmark och Norge.", "Påven bestämde det."], c: 1,
+    w: ["Hansan motsatte sig tvärtom en stark nordisk stat.", null, "Det var ingen erövring.", "Påven hade ingen sådan roll."],
+    f: "Albrekt av Mecklenburg besegrades 1389. I Kalmar beslutades att de tre länderna skulle ha samma kung, Erik av Pommern." },
+  { a: "sve", q: "Varför gjorde bönder och bergsmän uppror under Engelbrekt?",
+    o: ["De ville ha en dansk kung.", "Kriget mot Hansan stoppade järnhandeln, skatterna höjdes och fogdarna var hårda.", "De ville avskaffa kyrkan.", "De ville att Sverige skulle gå med i Hansan."], c: 1,
+    w: ["Kungen, Erik av Pommern, var redan unionskung.", null, "Upproret riktades mot kungens styre, inte mot kyrkan.", "Hansan var inget man gick med i som land."],
+    f: "Starkast var missnöjet i Bergslagen, som levde på järnexport. Upproret fick igenom lägre skatter och svenska fogdar." },
+
+];
+
+
+const el = id => document.getElementById(id);
+const LETTERS = ["1", "2", "3", "4"];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+let queue, pos, first, need, seen, total, stage, order, chosen, cur;
+
+function startSession(ids) {
+  queue = shuffle(ids); pos = 0; first = {}; need = {}; seen = new Set(); total = ids.length;
+  el("start").hidden = true; el("result").hidden = true; el("quiz").hidden = false;
+  render();
+}
+
+function insertLater(id, gap) {
+  const at = Math.min(pos + 1 + gap, queue.length);
+  queue.splice(at, 0, id);
+}
+
+function render() {
+  if (pos >= queue.length) return finish();
+  cur = queue[pos]; const q = Q[cur];
+  const repeat = seen.has(cur);
+  stage = "think"; chosen = null;
+  order = shuffle([0, 1, 2, 3]);
+  const done = Object.keys(first).length + (repeat ? 0 : 1);
+  el("prog").textContent = repeat ? "Repetition" : "Fråga " + done + " av " + total;
+  const pending = Object.values(need).filter(n => n > 0).length;
+  el("queueInfo").textContent = pending ? pending + " fel att svara rätt på igen" : "";
+  el("barFill").style.width = (Object.keys(first).length / total * 100) + "%";
+  el("again").hidden = !repeat;
+  el("areaTag").hidden = true;
+  el("qtext").textContent = q.q;
+  el("thinkBox").hidden = false; el("showRow").hidden = false;
+  el("opts").hidden = true; el("answerRow").hidden = true; el("fb").hidden = true;
+  el("sureBtn").disabled = true; el("guessBtn").disabled = true;
+  const box = el("opts"); box.innerHTML = "";
+  order.forEach((oi, k) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.type = "button";
+    const key = document.createElement("span"); key.className = "k"; key.textContent = LETTERS[k];
+    const t = document.createElement("span"); t.textContent = q.o[oi];
+    b.append(key, t);
+    b.addEventListener("click", () => choose(k));
+    box.appendChild(b);
+  });
+  el("showBtn").focus({ preventScroll: true });
+  window.scrollTo({ top: 0 });
+}
+
+function showOptions() {
+  if (stage !== "think") return;
+  stage = "choose";
+  el("thinkBox").hidden = true; el("showRow").hidden = true;
+  el("opts").hidden = false; el("answerRow").hidden = false;
+}
+
+function choose(k) {
+  if (stage !== "choose") return;
+  chosen = k;
+  [...el("opts").children].forEach((b, i) => b.classList.toggle("chosen", i === k));
+  el("sureBtn").disabled = false; el("guessBtn").disabled = false;
+}
+
+function submit(sure) {
+  if (stage !== "choose" || chosen === null) return;
+  stage = "feedback";
+  const q = Q[cur]; const picked = order[chosen]; const ok = picked === q.c;
+  const repeat = seen.has(cur);
+  if (!repeat) { first[cur] = { ok, sure }; seen.add(cur); }
+  if (ok) {
+    if (need[cur] > 0) { need[cur]--; if (need[cur] > 0) insertLater(cur, 6); }
+  } else {
+    need[cur] = 2; insertLater(cur, 4);
+  }
+  [...el("opts").children].forEach((b, i) => {
+    b.disabled = true; b.classList.remove("chosen");
+    if (order[i] === q.c) b.classList.add("right");
+    else if (i === chosen) b.classList.add("wrong");
+  });
+  el("answerRow").hidden = true;
+  el("areaTag").textContent = AREAS[q.a].name; el("areaTag").hidden = false;
+  const v = el("verdict");
+  if (ok) {
+    v.className = "verdict ok";
+    v.textContent = need[cur] > 0 ? "Rätt. Svara rätt en gång till, så är frågan klar." : (sure ? "Rätt, och du var säker." : "Rätt, men du gissade. Läs förklaringen så att du vet varför.");
+  } else {
+    v.className = "verdict bad";
+    v.textContent = sure ? "Fel, fast du var säker. Det här är en missuppfattning att rätta till." : "Fel.";
+  }
+  el("whyWrong").hidden = ok;
+  if (!ok) { el("whyWrong").innerHTML = ""; const b = document.createElement("b"); b.textContent = "Därför är ditt svar fel: "; el("whyWrong").append(b, document.createTextNode(q.w[picked])); }
+  el("explain").innerHTML = ""; const b2 = document.createElement("b"); b2.textContent = "Rätt svar: ";
+  const ans = q.o[q.c].replace(/\.$/, "") + ".";
+  const fp = document.createElement("span"); fp.style.display = "block"; fp.style.marginTop = "6px"; fp.textContent = q.f;
+  el("explain").append(b2, document.createTextNode(ans), fp);
+  el("ref").textContent = "Läs: " + AREAS[q.a].ref;
+  el("comeback").hidden = !(need[cur] > 0);
+  el("fb").hidden = false;
+  el("nextBtn").focus({ preventScroll: true });
+}
+
+function next() { if (stage !== "feedback") return; pos++; render(); }
+
+function finish() {
+  el("quiz").hidden = true; el("result").hidden = false;
+  const ids = Object.keys(first).map(Number);
+  const right = ids.filter(i => first[i].ok).length;
+  const pct = Math.round(right / ids.length * 100);
+  el("score").textContent = right + " av " + ids.length;
+  el("scoreNote").textContent = pct >= 85 ? pct + " procent. Mycket starkt på ett svårt quiz." :
+    pct >= 65 ? pct + " procent. Ett bra resultat på det här quizet. Plugga på områdena nedan." :
+    pct + " procent. Quizet är svårt med flit. Följ pluggplanen nedan och gör om quizet om ett par dagar.";
+  const per = {};
+  Object.keys(AREAS).forEach(k => per[k] = { right: 0, total: 0 });
+  ids.forEach(i => { const a = Q[i].a; per[a].total++; if (first[i].ok) per[a].right++; });
+  const rows = el("areaRows"); rows.innerHTML = "";
+  const status = p => p >= .8 ? ["Sitter", "s"] : p >= .5 ? ["Repetera", "r"] : ["Plugga mer", "p"];
+  Object.keys(AREAS).filter(k => per[k].total).forEach(k => {
+    const p = per[k].right / per[k].total; const [label, cls] = status(p);
+    const tr = document.createElement("tr");
+    const a = document.createElement("td"); a.textContent = AREAS[k].name;
+    const n = document.createElement("td"); n.className = "n"; n.textContent = per[k].right + "/" + per[k].total;
+    const s = document.createElement("td"); const pill = document.createElement("span"); pill.className = "pill " + cls; pill.textContent = label; s.appendChild(pill);
+    tr.append(a, n, s); rows.appendChild(tr);
+  });
+  const sw = ids.filter(i => !first[i].ok && first[i].sure);
+  el("sureWrongCard").hidden = sw.length === 0;
+  const ul = el("sureWrong"); ul.innerHTML = "";
+  sw.forEach(i => {
+    const li = document.createElement("li"); const b = document.createElement("b"); b.textContent = Q[i].q;
+    const s = document.createElement("span"); s.textContent = "Rätt svar: " + Q[i].o[Q[i].c];
+    li.append(b, s); ul.appendChild(li);
+  });
+  const weak = Object.keys(AREAS).filter(k => per[k].total && per[k].right / per[k].total < .8)
+    .sort((x, y) => per[x].right / per[x].total - per[y].right / per[y].total);
+  const plan = el("plan"); plan.innerHTML = "";
+  if (!weak.length) {
+    el("planHead").textContent = "Alla områden sitter. Inför testet:";
+
+  } else {
+    el("planHead").textContent = "Plugga på det här, i den här ordningen";
+    weak.forEach(k => {
+      const li = document.createElement("li"); const b = document.createElement("b");
+      b.textContent = AREAS[k].name + " · " + per[k].right + "/" + per[k].total + " rätt";
+      const s = document.createElement("span"); s.textContent = AREAS[k].plan + " Läs: " + AREAS[k].ref + ".";
+      li.append(b, s); plan.appendChild(li);
+    });
+  }
+  { const li = document.createElement("li"); const b = document.createElement("b"); b.textContent = "Inför testet";
+    const t = document.createElement("span"); t.textContent = "Läs dina anteckningar från lektionerna. Läs inledning och sammanfattning i boken: forntiden s. 35, 44 och 45, antiken s. 51 och 68–69, medeltiden s. 75 och 96–101. Skumläs kapitlen och förhör dig på de gröna rutorna. Gör sedan om dina fel här.";
+    li.append(b, t); plan.appendChild(li); }
+  const wrongIds = ids.filter(i => !first[i].ok);
+  el("retryWrong").hidden = wrongIds.length === 0;
+  el("retryWrong").textContent = "Gör om dina " + wrongIds.length + " fel";
+  el("retryWrong").onclick = () => startSession(wrongIds);
+  window.scrollTo({ top: 0 });
+}
+
+el("startBtn").addEventListener("click", () => startSession(Q.map((_, i) => i)));
+el("restart").addEventListener("click", () => startSession(Q.map((_, i) => i)));
+el("showBtn").addEventListener("click", showOptions);
+el("sureBtn").addEventListener("click", () => submit(true));
+el("guessBtn").addEventListener("click", () => submit(false));
+el("nextBtn").addEventListener("click", next);
+document.addEventListener("keydown", e => {
+  if (el("quiz").hidden || e.target.tagName === "INPUT") return;
+  if (stage === "think" && (e.key === " " || e.key === "Enter")) { e.preventDefault(); showOptions(); }
+  else if (stage === "choose" && LETTERS.includes(e.key)) { e.preventDefault(); choose(+e.key - 1); }
+  else if (stage === "choose" && chosen !== null && (e.key === "s" || e.key === "S")) { e.preventDefault(); submit(true); }
+  else if (stage === "choose" && chosen !== null && (e.key === "g" || e.key === "G")) { e.preventDefault(); submit(false); }
+  else if (stage === "feedback" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); next(); }
+});
+</script>
+</body>
+</html>
